@@ -1,31 +1,24 @@
 <template>
-    <div>
-        <b-container id="allshown1">
-            <b-row>
-                <b-col>
-                    <b-form-select v-model="selected" :options="locations" v-on:input="getDatas">
-                        <template slot="first">
-                            <option :value="null" disabled>-- กรุณาเลือกสถานที่ --</option>
-                        </template>
-                    </b-form-select>
-                </b-col>
-
-                <b-col>
-                    <b-button :href="toGraph()" variant="info">ค้นหา</b-button>
-                </b-col>
-            </b-row>
-        </b-container>
-
-        <br>
-
-        <b-container id="allshown2">
-            <b-row v-for="i in Math.floor((locations.length-1)/3)+1" v-bind:key="i">
-                <b-col id="allshown3" v-if="j*i<=locations.length" v-for="j in 3" v-bind:key="j" lg="2">
-                    {{j}}
-                </b-col>
-            </b-row>
-        </b-container>
-    </div>
+  <div>
+    <b-form-group id="group1">
+      <b-input-group>
+          <b-form-select v-model="selected" :options="locations" v-on:input="getDatas">
+            <template slot="first">
+                <option :value="null" disabled>-- กรุณาเลือกสถานที่ --</option>
+            </template>
+          </b-form-select>
+            <b-button :href="toGraph()" variant="info">ค้นหา</b-button>
+      </b-input-group>
+    </b-form-group>
+    <br>
+    <b-form-group id="group2">
+      <b-container>
+        <b-row id="row1" v-for="i in locations" v-bind:key="i">
+          {{i}}
+        </b-row>
+      </b-container>
+    </b-form-group>
+  </div>
 </template>
 
 <script>
@@ -119,25 +112,19 @@ export default {
 </script>
 
 <style>
-#allshown1 {
-  margin-top: 20px;
-  margin-left: 25%;
-  margin-right: 25%;
+#group1 {
+  margin-top: 50px;
+  margin-left: 30%;
+  margin-right: 30%;
 }
-#allshown2 {
+#group2 {
   margin-top: 20px;
   margin-left: 10%;
-  margin-right: 10%;
+  margin-right: 10%
 }
-#allshown3 {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
+#row1 {
   border: 6px double lightcoral;
   border-radius: 10px;
   padding: 10px;
-  text-align: center;
 }
 </style>
-
