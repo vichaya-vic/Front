@@ -13,9 +13,44 @@
     <br>
     <b-form-group id="group2">
       <b-container>
-        <b-row id="row1" v-for="i in locations" v-bind:key="i">
-          {{i}}
-        </b-row>
+        <!-- <b-row> -->
+        <b-card-group columns>
+          <b-card id="card1" v-for="i in locations.length" v-bind:key="i" 
+          :title="locations[i-1]"
+          :footer="'Updated '"
+          footer-class="text-right"
+          footer-bg-variant="light"
+          class="text-center">
+            <b-container>
+              <b-row align-h="center" no-gutters>
+                <b-col col sm="4" md="4" lg="4">ในร่ม</b-col>
+                <b-col col sm="4" md="4" lg="4"></b-col>
+                <b-col col sm="4" md="4" lg="4">กลางแจ้ง</b-col>
+              </b-row>
+              <b-row align-h="center" no-gutters>
+                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].temperature}}</b-col>
+                <b-col col sm="4" md="4" lg="4">อุณหภูมิ</b-col>
+                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].temperature}}</b-col>
+              </b-row>
+              <b-row align-h="center" no-gutters>
+                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].humidity}}</b-col>
+                <b-col col sm="4" md="4" lg="4">ความชื้น</b-col>
+                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].humidity}}</b-col>
+              </b-row>
+              <b-row align-h="center" no-gutters>
+                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].uv}}</b-col>
+                <b-col col sm="4" md="4" lg="4">รังสี UV</b-col>
+                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].uv}}</b-col>
+              </b-row>
+              <b-row align-h="center" no-gutters>
+                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].wind}}</b-col>
+                <b-col col sm="4" md="4" lg="4">แรงลม</b-col>
+                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].wind}}</b-col>
+              </b-row>
+            </b-container>
+          </b-card>
+        </b-card-group>
+        <!-- </b-row> -->
       </b-container>
     </b-form-group>
   </div>
@@ -29,7 +64,7 @@ export default {
   data() {
     return {
       locations: [],
-      datas: [],
+      datas:[],
       selected: null
     };
   },
@@ -38,9 +73,18 @@ export default {
       var d = [
         {
           location: "A",
-          data: [
+          indoor: [
             {
-              date: ["26", "07", "2018", "13", "15"],
+              time: ["13", "15", "23"],
+              uv: 30,
+              wind: 122,
+              humidity: 30,
+              temperature: 30
+            }
+          ],
+          outdoor: [
+            {
+              time: ["13", "15", "23"],
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -50,9 +94,18 @@ export default {
         },
         {
           location: "B",
-          data: [
+          indoor: [
             {
-              date: ["26", "07", "2018", "13", "20"],
+              time: ["13", "20", "23"],
+              uv: 30,
+              wind: 122,
+              humidity: 30,
+              temperature: 30
+            }
+          ],
+          outdoor: [
+            {
+              time: ["13", "15", "23"],
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -62,9 +115,18 @@ export default {
         },
         {
           location: "C",
-          data: [
+          indoor: [
             {
-              date: ["26", "07", "2018", "13", "20"],
+              time: ["13", "20", "23"],
+              uv: 30,
+              wind: 122,
+              humidity: 30,
+              temperature: 30
+            }
+          ],
+          outdoor: [
+            {
+              time: ["13", "15", "23"],
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -74,9 +136,18 @@ export default {
         },
         {
           location: "D",
-          data: [
+          indoor: [
             {
-              date: ["26", "07", "2018", "13", "15"],
+              time: ["13", "15", "23"],
+              uv: 30,
+              wind: 122,
+              humidity: 30,
+              temperature: 30
+            }
+          ],
+          outdoor: [
+            {
+              time: ["13", "15", "23"],
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -86,9 +157,18 @@ export default {
         },
         {
           location: "E",
-          data: [
+          indoor: [
             {
-              date: ["26", "07", "2018", "13", "20"],
+              time: ["13", "20", "23"],
+              uv: 30,
+              wind: 122,
+              humidity: 30,
+              temperature: 30
+            }
+          ],
+          outdoor: [
+            {
+              time: ["13", "15", "23"],
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -97,7 +177,7 @@ export default {
           ]
         }
       ];
-      this.datas = d;
+      this.datas=d
       this.locations = d.map(function(obj) {
         return obj.location;
       });
@@ -119,12 +199,9 @@ export default {
 }
 #group2 {
   margin-top: 20px;
-  margin-left: 10%;
-  margin-right: 10%
 }
-#row1 {
-  border: 6px double lightcoral;
-  border-radius: 10px;
-  padding: 10px;
+#card1 {
+  margin: 10px 10px 10px 10px;
+  background-color: rgb(233, 233, 233);
 }
 </style>
