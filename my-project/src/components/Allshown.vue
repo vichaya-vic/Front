@@ -1,58 +1,52 @@
 <template>
   <div>
-    <b-form-group id="group1">
+    <b-form-group id="group1" class="justify-content-md-center">
       <b-input-group>
           <b-form-select v-model="selected" :options="locations" v-on:input="getDatas">
             <template slot="first">
                 <option :value="null" disabled>-- กรุณาเลือกสถานที่ --</option>
             </template>
           </b-form-select>
-            <b-button :href="toGraph()" variant="info">ค้นหา</b-button>
+            <b-button :href="toGraph(selected)" variant="info">ค้นหา</b-button>
       </b-input-group>
     </b-form-group>
     <br>
-    <b-form-group id="group2">
-      <b-container>
-        <!-- <b-row> -->
-        <b-card-group columns>
-          <b-card id="card1" v-for="i in locations.length" v-bind:key="i" 
-          :title="locations[i-1]"
-          :footer="'Updated '"
-          footer-class="text-right"
-          footer-bg-variant="light"
-          class="text-center">
-            <b-container>
-              <b-row align-h="center" no-gutters>
-                <b-col col sm="4" md="4" lg="4">ในร่ม</b-col>
-                <b-col col sm="4" md="4" lg="4"></b-col>
-                <b-col col sm="4" md="4" lg="4">กลางแจ้ง</b-col>
+    <b-form id="group2" class="row">
+          <b-button id="button1" class="col-md-3" variant="outline-info" v-for="i in locations.length" v-bind:key="i" :href="toGraph(locations[i-1])">
+            <b-card-body :title="locations[i-1]">
+              <b-row align-h="center">
+                <b-col class="col-md-4">ในร่ม</b-col>
+                <b-col class="col-md-4"></b-col>
+                <b-col class="col-md-4">กลางแจ้ง</b-col>
               </b-row>
-              <b-row align-h="center" no-gutters>
-                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].temperature}}</b-col>
-                <b-col col sm="4" md="4" lg="4">อุณหภูมิ</b-col>
-                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].temperature}}</b-col>
+              <b-row align-h="center">
+                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].temperature}}</b-col>
+                <b-col class="col-md-4">อุณหภูมิ</b-col>
+                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].temperature}}</b-col>
               </b-row>
-              <b-row align-h="center" no-gutters>
-                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].humidity}}</b-col>
-                <b-col col sm="4" md="4" lg="4">ความชื้น</b-col>
-                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].humidity}}</b-col>
+              <b-row align-h="center">
+                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].humidity}}</b-col>
+                <b-col class="col-md-4">ความชื้น</b-col>
+                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].humidity}}</b-col>
               </b-row>
-              <b-row align-h="center" no-gutters>
-                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].uv}}</b-col>
-                <b-col col sm="4" md="4" lg="4">รังสี UV</b-col>
-                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].uv}}</b-col>
+              <b-row align-h="center">
+                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].uv}}</b-col>
+                <b-col class="col-md-4">รังสี UV</b-col>
+                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].uv}}</b-col>
               </b-row>
-              <b-row align-h="center" no-gutters>
-                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].wind}}</b-col>
-                <b-col col sm="4" md="4" lg="4">แรงลม</b-col>
-                <b-col col sm="4" md="4" lg="4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].wind}}</b-col>
+              <b-row align-h="center">
+                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].wind}}</b-col>
+                <b-col class="col-md-4">แรงลม</b-col>
+                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].wind}}</b-col>
               </b-row>
-            </b-container>
-          </b-card>
-        </b-card-group>
-        <!-- </b-row> -->
-      </b-container>
-    </b-form-group>
+            </b-card-body>
+            <b-card-footer id="footer1" footer-class="text-right" footer-bg-variant="light">
+              ข้อมูลเมื่อ (ในร่ม) {{new Date(datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].time*1000).toLocaleString()}}
+              <br>
+              (กลางแจ้ง) {{new Date(datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].time*1000).toLocaleString()}}
+            </b-card-footer>
+          </b-button>
+    </b-form>
   </div>
 </template>
 
@@ -64,7 +58,7 @@ export default {
   data() {
     return {
       locations: [],
-      datas:[],
+      datas: [],
       selected: null
     };
   },
@@ -75,7 +69,7 @@ export default {
           location: "A",
           indoor: [
             {
-              time: ["13", "15", "23"],
+              time: 1533978991,
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -84,7 +78,7 @@ export default {
           ],
           outdoor: [
             {
-              time: ["13", "15", "23"],
+              time: 1533978991,
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -96,7 +90,7 @@ export default {
           location: "B",
           indoor: [
             {
-              time: ["13", "20", "23"],
+              time: 1533978991,
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -105,7 +99,7 @@ export default {
           ],
           outdoor: [
             {
-              time: ["13", "15", "23"],
+              time: 1533978991,
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -117,7 +111,7 @@ export default {
           location: "C",
           indoor: [
             {
-              time: ["13", "20", "23"],
+              time: 1533978991,
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -126,7 +120,7 @@ export default {
           ],
           outdoor: [
             {
-              time: ["13", "15", "23"],
+              time: 1533978991,
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -138,7 +132,7 @@ export default {
           location: "D",
           indoor: [
             {
-              time: ["13", "15", "23"],
+              time: 1533978991,
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -147,7 +141,7 @@ export default {
           ],
           outdoor: [
             {
-              time: ["13", "15", "23"],
+              time: 1533978991,
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -159,7 +153,7 @@ export default {
           location: "E",
           indoor: [
             {
-              time: ["13", "20", "23"],
+              time: 1533978991,
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -168,7 +162,7 @@ export default {
           ],
           outdoor: [
             {
-              time: ["13", "15", "23"],
+              time: 1533978991,
               uv: 30,
               wind: 122,
               humidity: 30,
@@ -177,14 +171,14 @@ export default {
           ]
         }
       ];
-      this.datas=d
+      this.datas = d;
       this.locations = d.map(function(obj) {
         return obj.location;
       });
     },
-    toGraph() {
-      if (this.selected != null) {
-        return "graph/" + this.selected;
+    toGraph(s) {
+      if (s!=null) {
+        return "graph/" + s;
       }
     }
   }
@@ -194,14 +188,17 @@ export default {
 <style>
 #group1 {
   margin-top: 50px;
-  margin-left: 30%;
-  margin-right: 30%;
+  margin-left:20%;
+  margin-right:20%;
 }
 #group2 {
-  margin-top: 20px;
+  margin: 20px;
 }
-#card1 {
-  margin: 10px 10px 10px 10px;
-  background-color: rgb(233, 233, 233);
+#button1 {
+  margin: 10px 4% 10px 4%;
+  padding: 0px;
+}
+#footer1{
+  font-size: 10px;
 }
 </style>
