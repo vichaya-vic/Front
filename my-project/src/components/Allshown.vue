@@ -177,7 +177,7 @@ export default {
       });
     },
     toGraph(s) {
-      if (s!=null) {
+      if (s != null) {
         return "graph/" + s;
       }
     }
@@ -188,8 +188,8 @@ export default {
 <style>
 #group1 {
   margin-top: 50px;
-  margin-left:20%;
-  margin-right:20%;
+  margin-left: 20%;
+  margin-right: 20%;
 }
 #group2 {
   margin: 20px;
@@ -198,7 +198,7 @@ export default {
   margin: 10px 4% 10px 4%;
   padding: 0px;
 }
-#footer1{
+#footer1 {
   font-size: 10px;
 }
 </style>
