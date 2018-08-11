@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <b-form-group id="group1" class="justify-content-md-center">
+  <div class="m-5">
+    <b-form-group class="justify-content-md-center" style="margin-left:20%;margin-right:20%">
       <b-input-group>
           <b-form-select v-model="selected" :options="locations" v-on:input="getDatas">
             <template slot="first">
@@ -11,41 +11,44 @@
       </b-input-group>
     </b-form-group>
     <br>
-    <b-form id="group2" class="row">
-          <b-button id="button1" class="col-md-3" variant="outline-info" v-for="i in locations.length" v-bind:key="i" :href="toGraph(locations[i-1])">
-            <b-card-body :title="locations[i-1]">
-              <b-row align-h="center">
-                <b-col class="col-md-4">ในร่ม</b-col>
-                <b-col class="col-md-4"></b-col>
-                <b-col class="col-md-4">กลางแจ้ง</b-col>
-              </b-row>
-              <b-row align-h="center">
-                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].temperature}}</b-col>
-                <b-col class="col-md-4">อุณหภูมิ</b-col>
-                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].temperature}}</b-col>
-              </b-row>
-              <b-row align-h="center">
-                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].humidity}}</b-col>
-                <b-col class="col-md-4">ความชื้น</b-col>
-                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].humidity}}</b-col>
-              </b-row>
-              <b-row align-h="center">
-                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].uv}}</b-col>
-                <b-col class="col-md-4">รังสี UV</b-col>
-                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].uv}}</b-col>
-              </b-row>
-              <b-row align-h="center">
-                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].wind}}</b-col>
-                <b-col class="col-md-4">แรงลม</b-col>
-                <b-col class="col-md-4">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].wind}}</b-col>
-              </b-row>
-            </b-card-body>
-            <b-card-footer id="footer1" footer-class="text-right" footer-bg-variant="light">
-              ข้อมูลเมื่อ (ในร่ม) {{new Date(datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].time*1000).toLocaleString()}}
-              <br>
+    <b-form class="row justify-content-md-center">
+      <b-button-toolbar class="col justify-content-md-center pb-4" v-for="i in locations.length" v-bind:key="i">
+        <b-button class="p-0" variant="outline-info" :href="toGraph(locations[i-1])">
+          <b-card-body :title="locations[i-1]">
+            <b-row align-h="center">
+              <b-col>ในร่ม</b-col>
+              <b-col></b-col>
+              <b-col>กลางแจ้ง</b-col>
+            </b-row>
+            <b-row align-h="center">
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].temperature}}</b-col>
+              <b-col>อุณหภูมิ</b-col>
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].temperature}}</b-col>
+            </b-row>
+            <b-row align-h="center">
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].humidity}}</b-col>
+              <b-col>ความชื้น</b-col>
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].humidity}}</b-col>
+            </b-row>
+            <b-row align-h="center">
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].uv}}</b-col>
+              <b-col>รังสี UV</b-col>
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].uv}}</b-col>
+            </b-row>
+            <b-row align-h="center">
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].wind}}</b-col>
+              <b-col>แรงลม</b-col>
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].wind}}</b-col>
+            </b-row>
+          </b-card-body>
+          <b-card-footer class="text-right bg-light">
+            <small class="text-muted">
+              ข้อมูลเมื่อ (ในร่ม) {{new Date(datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].time*1000).toLocaleString()}}<br>
               (กลางแจ้ง) {{new Date(datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].time*1000).toLocaleString()}}
-            </b-card-footer>
-          </b-button>
+            </small>
+          </b-card-footer>
+        </b-button>
+      </b-button-toolbar>
     </b-form>
   </div>
 </template>
@@ -184,21 +187,3 @@ export default {
   }
 };
 </script>
-
-<style>
-#group1 {
-  margin-top: 50px;
-  margin-left: 20%;
-  margin-right: 20%;
-}
-#group2 {
-  margin: 20px;
-}
-#button1 {
-  margin: 10px 4% 10px 4%;
-  padding: 0px;
-}
-#footer1 {
-  font-size: 10px;
-}
-</style>
