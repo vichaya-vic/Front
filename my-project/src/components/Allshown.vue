@@ -15,6 +15,7 @@
       <b-button-toolbar class="col justify-content-md-center pb-4" v-for="i in locations.length" v-bind:key="i">
         <b-button class="p-0" variant="outline-info" :href="toGraph(locations[i-1])">
           <b-card-body :title="locations[i-1]">
+            <hr class="my-4">
             <b-row align-h="center">
               <b-col>ในร่ม</b-col>
               <b-col></b-col>
@@ -41,8 +42,8 @@
               <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].wind}}</b-col>
             </b-row>
           </b-card-body>
-          <b-card-footer class="text-right bg-light">
-            <small class="text-muted">
+          <b-card-footer class="text-right bg-light py-0">
+            <small class="text-muted font-italic font-weight-light" style="height: 20%">
               ข้อมูลเมื่อ (ในร่ม) {{new Date(datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].time*1000).toLocaleString()}}<br>
               (กลางแจ้ง) {{new Date(datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].time*1000).toLocaleString()}}
             </small>
