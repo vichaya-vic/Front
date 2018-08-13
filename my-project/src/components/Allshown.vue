@@ -1,5 +1,5 @@
 <template>
-  <div class="m-5">
+  <div style="margin:5%">
     <b-form-group class="justify-content-md-center" style="margin-left:20%;margin-right:20%">
       <b-input-group>
           <b-form-select v-model="selected" :options="locations" v-on:input="getDatas">
@@ -11,7 +11,7 @@
       </b-input-group>
     </b-form-group>
     <br>
-    <b-form class="row justify-content-md-center">
+    <b-form class="row justify-content-md-center"> 
       <b-button-toolbar class="col justify-content-md-center pb-4" v-for="i in locations.length" v-bind:key="i">
         <b-button class="p-0" variant="outline-info" :href="toGraph(locations[i-1])">
           <b-card-body :title="locations[i-1]">

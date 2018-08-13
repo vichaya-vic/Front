@@ -38,21 +38,15 @@ export default {
         password: ""
       },
       showAlert: false,
-      check: 0
+      check: 0,
+      testusername:"earth",
+      testemail:"e@",
+      testpassword:"eee"
     };
   },
   methods: {
     Login() {
-      axios
-        .post("//127.0.0.1:8081/addForm", this.form)
-        .then(response => {
-          console.log(response.data);
-          this.clickReset();
-        })
-        .catch(e => {
-          console.error(e);
-        });
-      /* if (
+      if (
         this.form.email === this.testemail &&
         this.form.password === this.testpassword
       ) {
@@ -65,7 +59,7 @@ export default {
         this.showAlert = true;
         this.form.email = "";
         this.form.password = "";
-      } */
+      }
     },
     addName() {
       store.commit("addName", this.form.name);
