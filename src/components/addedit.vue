@@ -12,7 +12,7 @@
 
     </b-form-group>
         <label >confine : </label>
-        <b-form-input v-model="form2.confine" ></b-form-input>
+        <b-form-input v-model="form2.confine" type="number"></b-form-input>
         <b-button type="submit" variant="primary">Submit</b-button>
  </b-form> 
     </div>
@@ -39,6 +39,18 @@
       evt.preventDefault();
       if(this.form2.location!='' && this.form2.confine!=''){//ห้ามซ้ำlocaกับdb,confine=only number 
         alert(JSON.stringify(this.form2));//ถ้าเลือกseleกดsubmitโดยไม่แก้ก้ยังได้
+
+
+        axios.post('//localhost:8081/addedit',this.form)
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(e=>{
+        console.error(e);
+      })
+
+
+
       }
       
     },

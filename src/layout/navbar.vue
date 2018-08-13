@@ -9,9 +9,9 @@
   <b-collapse is-nav id="nav_collapse">
 
     <b-navbar-nav>
-      <b-nav-item href="/form">form</b-nav-item>
-      <b-nav-item href="/register" >register</b-nav-item>
-      <b-nav-item href="/table" >table</b-nav-item>
+      <b-nav-item href="/add">add</b-nav-item>
+      <b-nav-item href="/addedit" >addedit</b-nav-item>
+      <!-- <b-nav-item href="/table" >table</b-nav-item> -->
     </b-navbar-nav>
 
   </b-collapse>
