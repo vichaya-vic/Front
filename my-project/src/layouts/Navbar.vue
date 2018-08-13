@@ -2,12 +2,12 @@
     <div>
         <b-navbar toggleable="md" type="dark" variant="info">
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-            <b-navbar-brand v-if="change===0">NameProgram</b-navbar-brand>
-            <b-navbar-brand v-if="change===1" href="/allshown">NameProgram</b-navbar-brand>
-            <b-collapse v-if="change===1" is-nav id="nav_collapse">                
+            <b-navbar-brand v-if="Change===0">NameProgram</b-navbar-brand>
+            <b-navbar-brand v-if="Change===1" href="/allshown">NameProgram</b-navbar-brand>
+            <b-collapse v-if="Change===1" is-nav id="nav_collapse">                
                <!-- Right aligned nav items -->
                 <b-navbar-nav class="ml-auto">
-                    <b-nav-item-dropdown :text="name" right>
+                    <b-nav-item-dropdown :text="Name" right>
                         <b-dropdown-item href="/allshown">หน้ารวม</b-dropdown-item>
                         <b-dropdown-item href="/graph">หน้าดูกราฟ</b-dropdown-item>
                         <div v-if="authority===true">
@@ -33,22 +33,23 @@
 </template>
 
 <script>
-import store from "../vuex/store.js";
-import Vuex from "vuex";
-global.vuex = Vuex;
+import store from '../vuex/store.js'
+import Vuex from 'vuex'
+global.vuex = Vuex
+
 
 export default {
   data() {
     return {
-      authority: false, //เอาไว้checkสิทธิ์ว่าเป็นadmin หรือ user
+      authority: false //เอาไว้checkสิทธิ์ว่าเป็นadmin หรือ user
     };
   },
   store,
   computed: {
-    name() {
+    Name() {
       return store.state.name;
     },
-    change() {
+    Change(){
       return store.state.change;
     }
   },
@@ -65,7 +66,7 @@ export default {
       this.$refs.myModalRef.hide();
     },
     addName() {
-      store.commit("addName", "");
+      store.commit("addUser", "");
     },
     addChange() {
       store.commit("addChange", 0);

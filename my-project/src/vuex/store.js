@@ -9,11 +9,12 @@ const state = {
 }
 
 const mutations = {
+
     addName: (state, n) => {
         state.name = n
     },
-    addChange: (state,c) => {
-        state.change = c
+    addChange: (state, n) => {
+        state.change = n
     }
 }
 
@@ -23,19 +24,19 @@ const getters = {
 }
 
 const actions = {
-    addNAME: (state, name) => {
-        store.commit('addName', name)
+    addNameVal: (state, n) => {
+        store.commit('addName', n)
     },
-    addCHANGE: (state, num) => {
-        store.commit('addChange',num)
+    addChangeVal: (state, n) => {
+        store.commit('addChange', n)
     }
 }
 
 let store = new Vuex.Store({
-    state: state,
-    mutations: mutations,
-    getters: getters,
-    actions: actions
+    state,
+    mutations,
+    getters,
+    actions
 })
 
 global.store = store

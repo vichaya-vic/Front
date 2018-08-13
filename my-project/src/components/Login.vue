@@ -25,6 +25,7 @@
 <script>
 import store from "../vuex/store.js";
 import Vuex from "vuex";
+import axios from "axios";
 global.vuex = Vuex;
 
 export default {
@@ -37,15 +38,21 @@ export default {
         password: ""
       },
       showAlert: false,
-      check: 0,
-      testemail: "mook@mahidol", //สมมติเป็นข้อมูลdatabase
-      testpassword: "mmm", // backend สร้างfunctionเพิ่ม
-      testusername: "mook"
+      check: 0
     };
   },
   methods: {
     Login() {
-      if (
+      axios
+        .post("//127.0.0.1:8081/addForm", this.form)
+        .then(response => {
+          console.log(response.data);
+          this.clickReset();
+        })
+        .catch(e => {
+          console.error(e);
+        });
+      /* if (
         this.form.email === this.testemail &&
         this.form.password === this.testpassword
       ) {
@@ -53,18 +60,12 @@ export default {
         this.form.name = this.testusername;
         this.addName();
         this.addChange();
-        this.$router.push("/allshown"); //ถ้า username กับ password ผ่านไปหน้ารวม(ของเอิทธ์)
+        this.$router.push("/allshown");
       } else {
         this.showAlert = true;
         this.form.email = "";
         this.form.password = "";
-      }
-    },
-    showModal() {
-      this.$refs.myModalRef.show();
-    },
-    hideModal() {
-      this.$refs.myModalRef.hide();
+      } */
     },
     addName() {
       store.commit("addName", this.form.name);
