@@ -15,6 +15,6 @@ global.vuex = Vuex
 
 export default {
   components: {Navbar},
-  store
+  store,
 }
 </script>

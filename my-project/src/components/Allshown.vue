@@ -7,13 +7,13 @@
                 <option :value="null" disabled>-- กรุณาเลือกสถานที่ --</option>
             </template>
           </b-form-select>
-            <b-button :href="toGraph(selected)" variant="info">ค้นหา</b-button>
+            <b-button v-on:click="toGraph(selected)" variant="info">ค้นหา</b-button>
       </b-input-group>
     </b-form-group>
     <br>
     <b-form class="row justify-content-md-center"> 
       <b-button-toolbar class="col justify-content-md-center pb-4" v-for="i in locations.length" v-bind:key="i">
-        <b-button class="p-0" variant="outline-info" :href="toGraph(locations[i-1])">
+        <b-button class="p-0" variant="outline-info" v-on:click="toGraph(locations[i-1])">
           <b-card-body :title="locations[i-1]">
             <hr class="my-4">
             <b-row align-h="center">
@@ -182,7 +182,7 @@ export default {
     },
     toGraph(s) {
       if (s != null) {
-        return "graph/" + s;
+        this.$router.push("/graph/"+ s);
       }
     }
   }

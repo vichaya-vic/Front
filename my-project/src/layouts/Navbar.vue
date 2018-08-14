@@ -3,16 +3,17 @@
         <b-navbar toggleable="md" type="dark" variant="info">
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
             <b-navbar-brand v-if="Change===0">NameProgram</b-navbar-brand>
-            <b-navbar-brand v-if="Change===1" href="/allshown">NameProgram</b-navbar-brand>
+            <b-navbar-brand v-if="Change===1" v-on:click="toPage('')">NameProgram</b-navbar-brand>
             <b-collapse v-if="Change===1" is-nav id="nav_collapse">                
                <!-- Right aligned nav items -->
                 <b-navbar-nav class="ml-auto">
                     <b-nav-item-dropdown :text="Name" right>
-                        <b-dropdown-item href="/allshown">หน้ารวม</b-dropdown-item>
-                        <b-dropdown-item href="/graph">หน้าดูกราฟ</b-dropdown-item>
+                        <b-dropdown-item v-on:click="toPage('allshown')">หน้าแรก</b-dropdown-item>
+                        <b-dropdown-item v-on:click="toPage('graph')">กราฟ</b-dropdown-item>
                         <div v-if="authority===true">
-                            <b-dropdown-item href="#">add user</b-dropdown-item>
-                            <b-dropdown-item href="#">add/edit</b-dropdown-item>
+                            <b-dropdown-item v-on:click="toPage('user')">ดูบัญชีผู้ใช้ทั้งหมด</b-dropdown-item>
+                            <b-dropdown-item v-on:click="toPage('adduser')">เพิ่มบัญชีผู้ใช้ใหม่</b-dropdown-item>
+                            <b-dropdown-item v-on:click="toPage('addlocation')">เพิ่ม/แก้ไขสถานที่</b-dropdown-item>
                         </div>
                         <b-dropdown-item v-on:click='showModal'>logout</b-dropdown-item>                        
                     </b-nav-item-dropdown>
@@ -59,6 +60,9 @@ export default {
       this.addChange();
       this.$router.push("/"); //ไปหน้าlogin
     },
+    toPage(s){
+      this.$router.push("/"+s);
+    },
     showModal() {
       this.$refs.myModalRef.show();
     },
@@ -66,7 +70,7 @@ export default {
       this.$refs.myModalRef.hide();
     },
     addName() {
-      store.commit("addUser", "");
+      store.commit("addName", "");
     },
     addChange() {
       store.commit("addChange", 0);
