@@ -32,43 +32,61 @@ global.vuex = Vuex;
 
 export default {
   store,
+  beforeMount(){
+    if(this.Status)  this.$router.push("/allshown");
+  },
   data() {
     return {
       form: {
         name: "",
         email: "",
-        password: ""
+        password: "",
+        isAdmin: false,
+        confirm: false
       },
-      showAlert: false,
-      check: 0,
-      testusername:"earth",
-      testemail:"e@e",
-      testpassword:"eee"
+      showAlert: false
     };
   },
+  computed: {
+    Status(){
+      return store.state.status;
+    }
+  },
   methods: {
-    onSubmit (evt) {
+    onSubmit(evt) {
       evt.preventDefault();
-      if (
-        this.form.email === this.testemail &&
-        this.form.password === this.testpassword
-      ) {
-        this.check = 1;
-        this.form.name = this.testusername;
-        this.addName();
-        this.addChange();
-        this.$router.push("/allshown");
-      } else {
-        this.showAlert = true;
-        this.form.email = "";
-        this.form.password = "";
-      }
+      axios.defaults.withCredentials = true; //set cookie for back end
+
+      axios
+        .post("//127.0.0.1:8081/login", {
+          email: this.form.email,
+          PASS: this.form.password
+        })
+        .then(response => {
+          if (response.confirm) {
+            this.addName();
+            this.addStatus();
+            this.addPermission();
+            this.$router.push("/allshown");
+          } else {
+            this.showAlert = true;
+            this.form.email = "";
+            this.form.password = "";
+          }
+          console.log(response);
+        })
+        .catch(e => {
+          console.error(e);
+        });
     },
     addName() {
       store.commit("addName", this.form.name);
     },
-    addChange() {
-      store.commit("addChange", this.check);
+    addStatus() {
+      store.commit("addStatus", this.form.confirm);
+    },
+    addPermission() {
+      store.commit("addPermission", this.form.isAdmin);
     }
   }
 };

@@ -5,7 +5,8 @@ Vue.use(Vuex)
 
 const state = {
     name: '',
-    change: 0
+    status: false,
+    permission: false,
 }
 
 const mutations = {
@@ -13,22 +14,29 @@ const mutations = {
     addName: (state, n) => {
         state.name = n
     },
-    addChange: (state, n) => {
-        state.change = n
+    addStatus: (state, n) => {
+        state.status = n
+    },
+    addPermission: (state, n) => {
+        state.permission = n
     }
 }
 
 const getters = {
     name: state => state.name,
-    num: state => state.change
+    status: state => state.status,
+    permission: state => state.permission
 }
 
 const actions = {
     addNameVal: (state, n) => {
         store.commit('addName', n)
     },
-    addChangeVal: (state, n) => {
-        store.commit('addChange', n)
+    addStatusVal: (state, n) => {
+        store.commit('addStatus', n)
+    },
+    addPermissionVal: (state, n) => {
+        store.commit('addPermission', n)
     }
 }
 
