@@ -9,13 +9,17 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "axios": "^0.18.0",
     "bootstrap": "^4.0.0-beta.2",
     "bootstrap-vue": "^1.2.0",
+    "chart.js": "^2.7.2",
+    "flatpickr": "^4.5.1",
+    "line-chart-vue": "^1.0.3",
     "popper.js": "^1.12.9",
     "vue": "^2.5.3",
-    "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vue-chartjs": "^3.4.0",
+    "vue-flatpickr": "^2.3.0",
+    "vue-flatpickr-component": "^7.0.4",
+    "vue-range-slider": "^0.6.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
