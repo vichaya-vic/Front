@@ -10,10 +10,10 @@
                 </b-button>
             </template>
         </b-table>
-        <b-modal ref="myModalRef" size="sm" class="text-center" hide-header>
+        <b-modal lazy ref="myModalRef" size="sm" class="text-center" hide-header>
             ต้องการลบบัญชีผู้ใช้ "{{deleted.name}}" ออกจากระบบใช่หรือไม่
-            <div slot="modal-footer" class="justify-content-md-center">
-                <b-btn size="sm" variant="seccondary" v-on:click="hideModal">
+            <div slot="modal-footer">
+                <b-btn size="sm" variant="secondary" v-on:click="hideModal">
                     ยกเลิก
                 </b-btn>
                 <b-btn size="sm" variant="primary" v-on:click="delUser(deleted)">
@@ -27,10 +27,11 @@
 <script>
 export default {
   beforeMount() {
-    if (this.Status) {
+    /* if (this.Status) {
       if (!this.Permission) this.$router.push("/allshown");
       else this.getUsers();
-    } else this.$router.push("/login");
+    } else this.$router.push("/login"); */
+    this.getUsers();
   },
   data() {
     return {
@@ -101,7 +102,7 @@ export default {
       });
     },
     delUser(del) {
-      console.log(del);
+      console.log("del");
       this.deleted = { name: "", email: "", type: "" };
       this.hideModal();
     },

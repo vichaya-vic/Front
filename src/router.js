@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Allshown from './components/Allshown.vue'
 import Login from './components/Login.vue'
+import Allshown from './components/Allshown.vue'
+import Graph from './components/Graph.vue'
 import User from './components/User.vue'
 import Adduser from './components/Adduser.vue'
-import Addlocation from './components/Addlocation.vue'
 
 Vue.use(Router)
 
@@ -26,6 +26,11 @@ export default new Router({
       component: Allshown
     },
     {
+      path: '/graph',
+      name: 'graph',
+      component: Graph
+    },
+    {
       path:'/user',
       name:'user',
       component: User
@@ -34,11 +39,6 @@ export default new Router({
       path:'/adduser',
       name:'adduser',
       component: Adduser
-    },
-    {
-      path:'/addlocation',
-      name:'addlocation',
-      component: Addlocation
     }
   ]
 })

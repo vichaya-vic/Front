@@ -13,7 +13,6 @@
                         <div v-if="Permission">
                             <b-dropdown-item v-on:click="toPage('user')">ดูบัญชีผู้ใช้ทั้งหมด</b-dropdown-item>
                             <b-dropdown-item v-on:click="toPage('adduser')">เพิ่มบัญชีผู้ใช้ใหม่</b-dropdown-item>
-                            <b-dropdown-item v-on:click="toPage('addlocation')">เพิ่ม/แก้ไขสถานที่</b-dropdown-item>
                         </div>
                         <b-dropdown-item v-on:click='showModal'>logout</b-dropdown-item>                        
                     </b-nav-item-dropdown>

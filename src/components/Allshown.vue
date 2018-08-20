@@ -1,13 +1,14 @@
 <template>
   <div style="margin:5%">
-    <b-form-group class="justify-content-md-center" style="margin-left:20%;margin-right:20%">
+    <b-form-group class="justify-content-md-center" style="margin-left:15%;margin-right:15%">
       <b-input-group>
           <b-form-select v-model="selected" :options="locations">
             <template slot="first">
                 <option :value="null" disabled>-- กรุณาเลือกสถานที่ --</option>
             </template>
           </b-form-select>
-            <b-button v-on:click="toGraph(selected)" variant="info">ค้นหา</b-button>
+          <b-button v-on:click="toGraph(selected)" variant="info">ค้นหา</b-button>
+          <b-button v-on:click="showModal('modal1')" variant="danger" class="ml-1 px-3">เพิ่ม</b-button>
       </b-input-group>
     </b-form-group>
 
@@ -51,6 +52,31 @@
         </b-button>
       </b-button-toolbar>
     </b-form>
+
+    <b-modal lazy ref="modal1" size="md" class="text-center" title="เพิ่มสถานที่">
+      <b-row align-v="center" class="p-2">
+        <b-col sm="3">ชื่อสถานที่ : </b-col >
+        <b-col>           
+          <b-input v-model="location" size="md" required type="text"></b-input>
+        </b-col >
+      </b-row>
+      <div slot="modal-footer">
+        <b-btn size="sm" class="px-3" variant="primary" v-on:click="addLocation('modal1')">
+          เพิ่ม
+        </b-btn>
+        <b-btn size="sm" variant="secondary" v-on:click="hideModal('modal1')">
+          ยกเลิก
+        </b-btn>
+      </div>
+    </b-modal>
+
+    <b-modal lazy ref="modal2" size="sm" class="text-center" body-text-variant="success" hide-header hide-footer>
+      เพิ่ม "{{location}}" เรียบร้อย
+    </b-modal>
+
+    <b-modal lazy ref="modal3" size="sm" class="text-center" body-text-variant="danger" hide-header hide-footer>
+      ไม่สามารถเพิ่ม "{{location}}" ได้
+    </b-modal>
   </div>
 </template>
 
@@ -62,14 +88,19 @@ export default {
   },
   data() {
     return {
+      location: "",
       locations: [],
       datas: [],
-      selected: null
+      selected: null,
+      test: true
     };
   },
   computed: {
     Status() {
       return store.state.status;
+    },
+    Permission() {
+      return store.state.permission;
     }
   },
   methods: {
@@ -190,6 +221,21 @@ export default {
       if (s != null) {
         this.$router.push("/graph/" + s);
       }
+    },
+    addLocation(m) {
+      if (this.location.replace(/ /g, "").length > 0) {
+        console.log(this.location);
+        this.hideModal(m);
+        if (this.test) this.showModal("modal2");
+        else this.showModal("modal3");
+      }
+    },
+    showModal(m) {
+      if (m === "modal1") this.location = "";
+      this.$refs[m].show();
+    },
+    hideModal(m) {
+      this.$refs[m].hide();
     }
   }
 };

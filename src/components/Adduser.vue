@@ -8,8 +8,8 @@
           {{textAlert}}
         </b-alert>
 
-        <b-alert variant="success" dismissible :show="form.confirm" @dismissed="form.confirm">
-          เพิ่ม "{{form.name}}" ในระบบแล้ว
+        <b-alert variant="success" dismissible :show="showSuccess" @dismissed="showSuccess=false">
+          เพิ่มบัญชีผู้ใช้ในระบบแล้ว
         </b-alert>
 
         <b-row align-v="center" class="p-2">
@@ -96,6 +96,7 @@ export default {
         isAdmin: false
       },
       showAlert: false,
+      showSuccess: false,
       textAlert: ""
     };
   },
@@ -125,8 +126,17 @@ export default {
             this.form.confirm = response.data.confirm;
             if (!response.data.confirm) {
               this.showAlert = true;
+              this.showSuccess = false;
               this.textAlert = "มีผู้ใช้อีเมลล์นี้แล้ว";
-            } else this.showAlert = false;
+            } else {
+              this.showAlert = false;
+              this.showSuccess = true;
+              this.form.name = "";
+              this.form.email = "";
+              this.form.PASS = "";
+              this.form.CONPASS = "";
+              this.form.isAdmin = false;
+            }
           })
           .catch(e => {
             console.error(e);
