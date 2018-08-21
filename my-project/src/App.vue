@@ -1,61 +1,77 @@
 <template>
 <div>
-   <b-container class="bv-example-row">
-    <b-row>
-        <b-col><LC :chartData="this.dataa_uv" :options="this.option" /> </b-col>
-        <b-col><LC :chartData="this.dataa_tmp" :options="this.option" /> </b-col>
-    </b-row>
-    <b-row>
-        <b-col><LC :chartData="this.dataa_wind" :options="this.option" /> </b-col>
-        <b-col><LC :chartData="this.dataa_humid" :options="this.option" /> </b-col
-    ></b-row>
-    <b-row>
-        <b-col><range-slider class="slider" min="0" max="36" step="1" v-on:input="add_all" v-model="sliderValue"> </range-slider></b-col>
-        <b-col>
-               <input type="radio" id="line" value="line" v-model="type_chart" v-on:change="add_all"  >
-                <label for="line">Line</label>
-              <input type="radio" id="var" value="bar" v-model="type_chart" v-on:change="add_all" >
-                <label for="bar">Bar</label>
-        </b-col>
-   </b-row> 
-   <b-row>
-          <b-col>  
-                <div>
-                        <b-badge variant="dark">Date</b-badge>
-                        <Flatpickr :options="DateOptions"  v-model="my_filter.date"/>
-                        <!-- <b-badge variant="dark">Form(Time)</b-badge>
-                        <Flatpickr :options=" FtimeOptions"  v-model="my_filter.Ftime"/>
-                        <b-badge variant="dark">To(Time)</b-badge>
-                        <Flatpickr :options=" TtimeOptions"  v-model="my_filter.Ttime"/> -->
-                        <b-button  variant="success" v-on:click="Search">Search</b-button>
-                </div>      
-          </b-col>
-            
-    </b-row> 
+  <h1 v-if="this.C==true">Finish</h1>
+   <b-container class="bv-example-row"  v-if="this.C===true">
+            <b-row>
+                <b-col><LC :chartData="this.dataa_uv" :options="this.option" /> </b-col>
+                <b-col><LC :chartData="this.dataa_tmp" :options="this.option" /> </b-col>
+            </b-row>
+            <b-row>
+                <b-col><LC :chartData="this.dataa_wind" :options="this.option" /> </b-col>
+                <b-col><LC :chartData="this.dataa_humid" :options="this.option" /> </b-col
+            ></b-row>
+            <b-row>
+                <b-col><range-slider class="slider" :min=0 :max=36 step="1" :disabled="false" v-on:input="add_all" v-model="sliderValue" > </range-slider></b-col>
+                <b-col>
+                      <input type="radio" id="type_graph" value="line" v-model="type_chart" v-on:change="add_all"  >
+                      <label for="line">กราฟเส้น</label>
+                      <input type="radio" id="type_graph" value="bar" v-model="type_chart" v-on:change="add_all" >
+                      <label for="bar">กราฟแท่ง</label>
+                </b-col>
+          </b-row> 
+          <b-row>
+                  <b-col>  
+                        <div>
+
+                                <b-form-select id="exampleInput3"
+                                        :options="db_location"
+                                        required
+                                        v-model="my_filter.location">
+                                </b-form-select>
+                                <b-badge variant="dark">เลือกวันที่</b-badge>
+                                <Flatpickr :options="DateOptions"  v-model="my_filter.typedate"/>
+                                <input type="radio" id="inB"   value="true" v-model="x"  v-on:click="Inbuilding" ><label for="inB">ในอาคาร</label>
+                                <input type="radio" id="outB"  value="false" v-model="x"  v-on:click="outbuilding"   ><label for="outB">นอกอาคาร</label>
+                                
+                                <!-- <b-badge variant="dark">Form(Time)</b-badge>
+                                <Flatpickr :options=" FtimeOptions"  v-model="my_filter.Ftime"/>
+                                <b-badge variant="dark">To(Time)</b-badge>
+                                <Flatpickr :options=" TtimeOptions"  v-model="my_filter.Ttime"/> -->
+                                <b-button  variant="success" v-on:click="Search">ค้นหา</b-button>
+                        </div>      
+                  </b-col>
+                    
+            </b-row> 
 </b-container> 
 </div>  
 </template>
 <script>
 import flatPickr from 'vue-flatpickr-component';
-import graph from "./test.vue";
+
 import LC from "./LineChart.vue";
 import RangeSlider from 'vue-range-slider'
 import 'vue-range-slider/dist/vue-range-slider.css'
+import axios from "axios";
+
+var call = false;
 export default {
-  components: { graph, LC,RangeSlider,   flatPickr },
+  components: {  LC,RangeSlider,   flatPickr },
   data() {
-    return {
+    return {      
+                  C:false,
+                  db_location:[  { text: 'กรุณาเลือกสถานที่', value: null },'A','X'],
                   my_filter:{
-                      date:'',
-                      Ftime:'',
-                      Ttime:''
+                      location:'X',
+                      inBuilding:true,
+                      typedate:new Date().toDateString(),
                   },
                   DateOptions: {
                       // mode: "range",
+                      maxDate:  new Date(),
                       utc: true,
-                      defaultDate: '2016-12-27T16:16:22.585Z',
+                      defaultDate: new Date(),
                   },   
-                    FtimeOptions: {
+                  FtimeOptions: {
                         enableTime: true,
                         noCalendar: true,
                         time_24hr: true,
@@ -67,31 +83,52 @@ export default {
                         time_24hr: true,
                         defaultDate: "12:00"
                   }, 
-                option: { responsive:false, maintainAspectRatio: false, 
+                option: { responsive:true, maintainAspectRatio: false, 
                 //  scales: {
                 //           yAxes: [ {ticks: {min: 0, max:12}}]
                 //          },         
                 },
-                timeline:[1,2,3,4,5,6,7,8,9,10,11,12,12,11,10,9,8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,9,10,11,12,12,11,10,9,8,7,6,5,4,3,2,1],
+                timeline :[],
+                timelabel:[],
                 tmp_data:[1,2,3,4,5,6,6,5,4,3,2,1,1,2,3,4,5,6,6,5,4,3,2,1,1,2,3,4,5,6,6,5,4,3,2,1,1,2,3,4,5,6,6,5,4,3,2,1],
                 labes: [],
-                dataa_uv: { labels: [], datasets: [] },
-                dataa_tmp: { labels: [], datasets: [] },
-                dataa_wind: { labels: [], datasets: [] },
-                dataa_humid: { labels: [], datasets: [] },
+                dataa_uv: {},
+                dataa_tmp: {},
+                dataa_wind: {},
+                dataa_humid: {},
                 type_chart:'line',
                 sliderValue: 0,
+                form:{
+                        location:"A",
+                        inBuilding:true,
+                        typedate:"2018-08-14"
+                    },
+                    x:"disabled"
+           
     };
   },
   methods: {
-       Search()
+    Inbuilding()
+  {
+    this.my_filter.inBuilding = true
+    
+
+  },
+    outbuilding()
+  {
+       this.my_filter.inBuilding = false
+    
+
+  },
+    Search()
         {
             console.log(JSON.stringify(this.my_filter));
-            return JSON.stringify(this.my_filter);
+          
+            this.getdata()
         },
     add_uv(x) {
       this.dataa_uv = {
-        labels:this.timeline.slice(x,x+30),
+        labels:this.timelabel,
         datasets: [
           {
             label: "UV",
@@ -100,7 +137,7 @@ export default {
             borderWidth: 1,
             pointBorderColor: "white",
             backgroundColor: this.gradient,
-            data:this.tmp_data.slice(x,x+30),
+            data:this.tmp_data.slice(x,x+13),
             type:this.type_chart
           }
         ]
@@ -108,7 +145,7 @@ export default {
     },
     add_tmp(x) {
       this.dataa_tmp = {
-        labels: this.timeline.slice(x,x+12),
+        labels: this.timelabel,
         datasets: [
           {
             label: "Temperature",
@@ -117,7 +154,7 @@ export default {
             borderWidth: 1,
             pointBorderColor: "white",
             backgroundColor: this.gradient,
-            data:this.tmp_data.slice(x,x+12),
+            data:this.tmp_data.slice(x,x+13),
             type:this.type_chart
           }
         ]
@@ -125,7 +162,7 @@ export default {
     },
     add_wind(x) {
       this.dataa_wind = {
-        labels:this.timeline.slice(x,x+12),
+        labels:this.timelabel,
         datasets: [
           {
             label: "Wind",
@@ -134,7 +171,7 @@ export default {
             borderWidth: 1,
             pointBorderColor: "white",
             backgroundColor: this.gradient,
-            data:this.tmp_data.slice(x,x+12),
+            data:this.tmp_data.slice(x,x+13),
             type:this.type_chart
 
           }
@@ -143,7 +180,7 @@ export default {
     },
     add_humid(x) {
       this.dataa_humid = {
-        labels: this.timeline.slice(x,x+12),
+        labels:this.timelabel,
         datasets: [
           {
             label: "humid",
@@ -152,22 +189,56 @@ export default {
             borderWidth: 1,
             pointBorderColor: "white",
             backgroundColor: this.gradient,
-            data:this.tmp_data.slice(x,x+12),
+            data:this.tmp_data.slice(x,x+13),
             type:this.type_chart
           }
         ]
       };
     },
     add_all(){
+      
       this.add_uv(this.sliderValue);
       this.add_tmp(this.sliderValue);
       this.add_wind(this.sliderValue);
       this.add_humid(this.sliderValue);
+      console.log()
     }, 
-    getUnits: function() {this.add_all()}
+    getdata(){
+
+ var self = this ;
+ 
+ 
+//setInterval(function(){   }, 3000);
+                    axios.post(
+              "//localhost:8081/api/getgraph", {
+          	  "location":self.my_filter.location,
+              "inBuilding":self.my_filter.inBuilding,
+              "typedate": self.my_filter.typedate
+          })
+                  .then(function(response) {
+                        self.timeline = response.data.time;
+                        var x =24;
+                        self.timelabel = self.timelabel.concat(self.timeline.slice(x-6,x+7))
+                         self.C = true  
+                         self.add_all();         
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                  });      
+
+        
+  
+    },
+
+    
+    getUnits: function() {this.getdata();}
   },
     beforeMount(){this.getUnits()
  },
+    mounted()
+    {   
+  
+    }
 };
 </script>
 <style>
