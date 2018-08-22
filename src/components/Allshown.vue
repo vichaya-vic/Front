@@ -23,30 +23,30 @@
               <b-col>กลางแจ้ง</b-col>
             </b-row>
             <b-row align-h="center">
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].temperature}}°</b-col>
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.temperature}}</b-col>
               <b-col>อุณหภูมิ °C</b-col>
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].temperature}}°</b-col>
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.temperature}}</b-col>
             </b-row>
             <b-row align-h="center">
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].humidity}}</b-col>
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.humidity}}</b-col>
               <b-col>ความชื้น %</b-col>
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].humidity}}</b-col>
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.humidity}}</b-col>
             </b-row>
             <b-row align-h="center">
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].uv}}</b-col>
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.uv}}</b-col>
               <b-col>ดัชนี UV</b-col>
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].uv}}</b-col>
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.uv}}</b-col>
             </b-row>
             <b-row align-h="center">
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].wind}}</b-col>
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.wind}}</b-col>
               <b-col>แรงลม กม./ชม.</b-col>
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].wind}}</b-col>
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.wind}}</b-col>
             </b-row>
           </b-card-body>
           <b-card-footer class="text-right bg-light py-0">
             <small class="text-muted font-italic font-weight-light" style="height: 20%">
-              ข้อมูลเมื่อ (ในร่ม) {{new Date(datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].time*1000).toLocaleString()}}<br>
-              (กลางแจ้ง) {{new Date(datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].time*1000).toLocaleString()}}
+              ข้อมูลเมื่อ (ในร่ม) {{new Date(datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.time).toLocaleString()}}<br>
+              (กลางแจ้ง) {{new Date(datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.time).toLocaleString()}}
             </small>
           </b-card-footer>
         </b-button>
@@ -97,7 +97,7 @@ export default {
       locations: [],
       datas: [],
       selected: null,
-      test: true
+      confirm: false
     };
   },
   computed: {
@@ -110,20 +110,18 @@ export default {
   },
   methods: {
     getDatas() {
-      //get data form DB//
       axios.defaults.withCredentials = true;
       axios
-        .post("//localhost:8081/api/getallsensor",{})
+        .post("//localhost:8081/api/getallsensor", {})
         .then(response => {
-          console.log(response.data);
+          this.datas = response.data;
+          this.locations = response.data.map(function(obj) {
+            return obj.location;
+          });
         })
         .catch(e => {
           console.error(e);
         });
-      /* this.datas = d;
-      this.locations = d.map(function(obj) {
-        return obj.location;
-      }); */
     },
     toGraph(s) {
       if (s != null) {
@@ -133,10 +131,19 @@ export default {
     addLocation(m) {
       if (this.location.replace(/ /g, "").length > 0) {
         //connect to DB//
-        console.log(this.location);
-        this.hideModal(m);
-        if (this.test) this.showModal("modal2");
-        else this.showModal("modal3");
+        axios.defaults.withCredentials = true;
+        axios
+          .post("//localhost:8081/api/newlocation", { location: this.location })
+          .then(response => {
+            console.log(response.data);
+            this.confirm = response.data.confirm;
+            this.hideModal(m);
+            if (this.confirm) this.showModal("modal2");
+            else this.showModal("modal3");
+          })
+          .catch(e => {
+            console.error(e);
+          });
       }
     },
     showModal(m) {
