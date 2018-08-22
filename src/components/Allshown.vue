@@ -8,13 +8,13 @@
             </template>
           </b-form-select>
           <b-button v-on:click="toGraph(selected)" variant="info">ค้นหา</b-button>
-          <b-button v-on:click="showModal('modal1')" variant="danger" class="ml-1 px-3">เพิ่ม</b-button>
+          <b-button v-if="Permission" v-on:click="showModal('modal1')" variant="danger" class="ml-1 px-3">เพิ่ม</b-button>
       </b-input-group>
     </b-form-group>
 
     <b-form class="row justify-content-md-center  pt-5"> 
       <b-button-toolbar class="col justify-content-md-center pb-5" v-for="i in locations.length" v-bind:key="i">
-        <b-button class="p-0" variant="outline-info" v-on:click="toGraph(locations[i-1])">
+        <b-button size="md" class="p-0" variant="outline-info" v-on:click="toGraph(locations[i-1])">
           <b-card-body :title="locations[i-1]">
             <hr class="my-4">
             <b-row align-h="center">
@@ -23,23 +23,23 @@
               <b-col>กลางแจ้ง</b-col>
             </b-row>
             <b-row align-h="center">
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].temperature}}</b-col>
-              <b-col>อุณหภูมิ</b-col>
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].temperature}}</b-col>
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].temperature}}°</b-col>
+              <b-col>อุณหภูมิ °C</b-col>
+              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].temperature}}°</b-col>
             </b-row>
             <b-row align-h="center">
               <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].humidity}}</b-col>
-              <b-col>ความชื้น</b-col>
+              <b-col>ความชื้น %</b-col>
               <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].humidity}}</b-col>
             </b-row>
             <b-row align-h="center">
               <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].uv}}</b-col>
-              <b-col>รังสี UV</b-col>
+              <b-col>ดัชนี UV</b-col>
               <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].uv}}</b-col>
             </b-row>
             <b-row align-h="center">
               <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor[0].wind}}</b-col>
-              <b-col>แรงลม</b-col>
+              <b-col>แรงลม กม./ชม.</b-col>
               <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor[0].wind}}</b-col>
             </b-row>
           </b-card-body>
@@ -81,6 +81,11 @@
 </template>
 
 <script>
+import store from "../vuex/store.js";
+import Vuex from "vuex";
+import axios from "axios";
+global.vuex = Vuex;
+
 export default {
   beforeMount() {
     if (!this.Status) this.$router.push("/login");
@@ -105,117 +110,20 @@ export default {
   },
   methods: {
     getDatas() {
-      var d = [
-        {
-          location: "A",
-          indoor: [
-            {
-              time: 1533978991,
-              uv: 30,
-              wind: 122,
-              humidity: 30,
-              temperature: 30
-            }
-          ],
-          outdoor: [
-            {
-              time: 1533978991,
-              uv: 30,
-              wind: 122,
-              humidity: 30,
-              temperature: 30
-            }
-          ]
-        },
-        {
-          location: "B",
-          indoor: [
-            {
-              time: 1533978991,
-              uv: 30,
-              wind: 122,
-              humidity: 30,
-              temperature: 30
-            }
-          ],
-          outdoor: [
-            {
-              time: 1533978991,
-              uv: 30,
-              wind: 122,
-              humidity: 30,
-              temperature: 30
-            }
-          ]
-        },
-        {
-          location: "C",
-          indoor: [
-            {
-              time: 1533978991,
-              uv: 30,
-              wind: 122,
-              humidity: 30,
-              temperature: 30
-            }
-          ],
-          outdoor: [
-            {
-              time: 1533978991,
-              uv: 30,
-              wind: 122,
-              humidity: 30,
-              temperature: 30
-            }
-          ]
-        },
-        {
-          location: "D",
-          indoor: [
-            {
-              time: 1533978991,
-              uv: 30,
-              wind: 122,
-              humidity: 30,
-              temperature: 30
-            }
-          ],
-          outdoor: [
-            {
-              time: 1533978991,
-              uv: 30,
-              wind: 122,
-              humidity: 30,
-              temperature: 30
-            }
-          ]
-        },
-        {
-          location: "E",
-          indoor: [
-            {
-              time: 1533978991,
-              uv: 30,
-              wind: 122,
-              humidity: 30,
-              temperature: 30
-            }
-          ],
-          outdoor: [
-            {
-              time: 1533978991,
-              uv: 30,
-              wind: 122,
-              humidity: 30,
-              temperature: 30
-            }
-          ]
-        }
-      ];
-      this.datas = d;
+      //get data form DB//
+      axios.defaults.withCredentials = true;
+      axios
+        .post("//localhost:8081/api/getallsensor",{})
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(e => {
+          console.error(e);
+        });
+      /* this.datas = d;
       this.locations = d.map(function(obj) {
         return obj.location;
-      });
+      }); */
     },
     toGraph(s) {
       if (s != null) {
@@ -224,6 +132,7 @@ export default {
     },
     addLocation(m) {
       if (this.location.replace(/ /g, "").length > 0) {
+        //connect to DB//
         console.log(this.location);
         this.hideModal(m);
         if (this.test) this.showModal("modal2");

@@ -67,9 +67,10 @@ export default {
             this.form.name = response.data.name;
             this.form.isAdmin = response.data.isAdmin;
             this.form.confirm = response.data.confirm;
-            this.addName();
-            this.addStatus();
-            this.addPermission();
+            this.addName(this.form.name);
+            this.addEmail(this.form.email);
+            this.addStatus(this.form.confirm);
+            this.addPermission(this.form.isAdmin);
             this.$router.push("/allshown");
           } else {
             this.showAlert = true;
@@ -82,14 +83,17 @@ export default {
           console.error(e);
         });
     },
-    addName() {
-      store.commit("addName", this.form.name);
+    addName(x) {
+      store.commit("addName", x);
     },
-    addStatus() {
-      store.commit("addStatus", this.form.confirm);
+    addEmail(x) {
+      store.commit("addEmail", x);
     },
-    addPermission() {
-      store.commit("addPermission", this.form.isAdmin);
+    addStatus(x) {
+      store.commit("addStatus", x);
+    },
+    addPermission(x) {
+      store.commit("addPermission", x);
     }
   }
 };

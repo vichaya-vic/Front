@@ -60,9 +60,9 @@
 
         <b-row align-h="center" class="pt-3">
           <b-form-group required > 
-            <input type="radio" id="two" value=false v-model="form.isAdmin">
+            <input type="radio" id="two" :value="false" v-model="form.isAdmin">
               <label class="p-2" for="user">ยูสเซอร์</label>
-            <input type="radio" value =true v-model="form.isAdmin">
+            <input type="radio" :value ="true" v-model="form.isAdmin">
               <label class="p-2" for="admin">แอดมิน</label>
           </b-form-group>
         </b-row>
@@ -113,6 +113,7 @@ export default {
       evt.preventDefault();
 
       if (this.func_check()) {
+        axios.defaults.withCredentials = true;
         axios
           .post("//localhost:8081/register", {
             name: this.form.name,
@@ -122,7 +123,7 @@ export default {
             isAdmin: this.form.isAdmin
           })
           .then(response => {
-            console.log(response);
+            console.log(response.data);
             this.form.confirm = response.data.confirm;
             if (!response.data.confirm) {
               this.showAlert = true;
