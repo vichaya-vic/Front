@@ -26,10 +26,6 @@
         <b-modal lazy ref="modal1" size="sm" class="text-center" body-text-variant="success" hide-header hide-footer>
             ลบผู้ใช้ "{{deleted.name}}" แล้ว
         </b-modal>
-
-        <b-modal lazy ref="modal2" size="sm" class="text-center" body-text-variant="danger" hide-header hide-footer>
-            {{err}}
-        </b-modal>
     </div>
 </template>
 
@@ -63,7 +59,6 @@ export default {
   data() {
     return {
       users: [],
-      err: "",
       deleted: { name: "", email: "", type: "" },
       fields: {
         name: { label: "ชื่อ", sortable: true },
@@ -79,48 +74,52 @@ export default {
       //get data form DB//
       axios.defaults.withCredentials = true;
       axios
-        .post("//localhost:8081/showuser", {})
+        .post("//localhost:8081/getUsers", {})
         .then(response => {
           console.log(response.data);
-          this.users = response.data.map(function(obj) {
-            var new_obj = {};
-            /* if (obj.status === "online") {
-              new_obj._rowVariant = "success";
-              new_obj.status = "ออนไลน์";
-            } else if (obj.status === "offline") {
-              new_obj._rowVariant = "danger";
-              new_obj.status = "ออฟไลน์";
-            } */
+          if (response.data.confirm) {
+            this.users = response.data.datas.map(function(obj) {
+              var new_obj = {};
 
-            if (obj.isAdmin === true) new_obj.type = "แอดมิน";
-            else if (obj.isAdmin === false) new_obj.type = "ยูสเซอร์";
+              if (obj.isAdmin === true) new_obj.type = "แอดมิน";
+              else if (obj.isAdmin === false) new_obj.type = "ยูสเซอร์";
 
-            new_obj.name = obj.name;
-            new_obj.email = obj.email;
+              new_obj.name = obj.name;
+              new_obj.email = obj.email;
 
-            return new_obj;
-          });
+              return new_obj;
+            });
+          }
+          else{
+            this.addName("");
+            this.addEmail("");
+            this.addStatus(false);
+            this.addPermission(false);
+            this.$router.push("/");
+          }
         })
         .catch(e => {
           console.error(e);
         });
     },
     delUser(del) {
-      //connect to DB//
       console.log("del");
       axios.defaults.withCredentials = true;
       axios
-        .post("//localhost:8081/disableuser", {
+        .post("//localhost:8081/delUser", {
           name: this.deleted.name,
           email: this.deleted.email,
           isAdmin: this.deleted.isAdmin
         })
         .then(response => {
           console.log(response.data);
-          if(response.data.status===true) this.$refs.modal1.show();
+          if (response.data.confirm) this.$refs.modal1.show();
           else {
-            this.err=response.data.err;
-            this.$refs.modal2.show();
+            this.addName("");
+            this.addEmail("");
+            this.addStatus(false);
+            this.addPermission(false);
+            this.$router.push("/");
           }
           this.getUsers();
         })
@@ -137,6 +136,18 @@ export default {
     },
     hideModal() {
       this.$refs.myModalRef.hide();
+    },
+    addName(x) {
+      store.commit("addName", x);
+    },
+    addEmail(x) {
+      store.commit("addEmail", x);
+    },
+    addStatus(x) {
+      store.commit("addStatus", x);
+    },
+    addPermission(x) {
+      store.commit("addPermission", x);
     }
   }
 };

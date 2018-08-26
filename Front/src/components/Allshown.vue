@@ -12,46 +12,48 @@
       </b-input-group>
     </b-form-group>
 
-    <b-form class="row justify-content-md-center  pt-5"> 
-      <b-button-toolbar class="col justify-content-md-center pb-5" v-for="i in locations.length" v-bind:key="i">
-        <b-button size="md" class="p-0" variant="outline-info" v-on:click="toGraph(locations[i-1])">
+    <b-container class="justify-content-md-center">
+      <b-row>
+        <b-col sm="4" v-for="i in locations.length" v-bind:key="i">
+          <b-button style="width:100%" size="md" class="p-0 mt-5" variant="outline-info" v-on:click="toGraph(locations[i-1])">
           <b-card-body :title="locations[i-1]">
             <hr class="my-4">
             <b-row align-h="center">
-              <b-col>ในร่ม</b-col>
-              <b-col></b-col>
-              <b-col>กลางแจ้ง</b-col>
+              <b-col sm="4" class="text-center">ในอาคาร</b-col>
+              <b-col sm="4" class="text-center"></b-col>
+              <b-col sm="4" class="text-center">นอกอาคาร</b-col>
             </b-row>
             <b-row align-h="center">
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.temperature}}</b-col>
-              <b-col>อุณหภูมิ °C</b-col>
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.temperature}}</b-col>
+              <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.temperature}}</b-col>
+              <b-col sm="4" class="text-center">อุณหภูมิ °C</b-col>
+              <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.temperature}}</b-col>
             </b-row>
             <b-row align-h="center">
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.humidity}}</b-col>
-              <b-col>ความชื้น %</b-col>
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.humidity}}</b-col>
+              <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.humidity}}</b-col>
+              <b-col sm="4" class="text-center">ความชื้น %</b-col>
+              <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.humidity}}</b-col>
             </b-row>
             <b-row align-h="center">
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.uv}}</b-col>
-              <b-col>ดัชนี UV</b-col>
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.uv}}</b-col>
+              <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.uv}}</b-col>
+              <b-col sm="4" class="text-center">ดัชนี UV</b-col>
+              <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.uv}}</b-col>
             </b-row>
             <b-row align-h="center">
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.wind}}</b-col>
-              <b-col>แรงลม กม./ชม.</b-col>
-              <b-col>{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.wind}}</b-col>
+              <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.wind}}</b-col>
+              <b-col sm="4" class="text-center">แรงลม กม./ชม.</b-col>
+              <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.wind}}</b-col>
             </b-row>
           </b-card-body>
           <b-card-footer class="text-right bg-light py-0">
             <small class="text-muted font-italic font-weight-light" style="height: 20%">
-              ข้อมูลเมื่อ (ในร่ม) {{new Date(datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.time).toLocaleString()}}<br>
-              (กลางแจ้ง) {{new Date(datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.time).toLocaleString()}}
+              ข้อมูลเมื่อ (ในร่ม) {{showTime(datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.time)}}<br>
+              (กลางแจ้ง) {{showTime(datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.time)}}
             </small>
           </b-card-footer>
         </b-button>
-      </b-button-toolbar>
-    </b-form>
+        </b-col>
+      </b-row>
+    </b-container>
 
     <b-modal lazy ref="modal1" size="md" class="text-center" title="เพิ่มสถานที่">
       <b-row align-v="center" class="p-2">
@@ -75,7 +77,7 @@
     </b-modal>
 
     <b-modal lazy ref="modal3" size="sm" class="text-center" body-text-variant="danger" hide-header hide-footer>
-      ไม่สามารถเพิ่ม "{{location}}" ได้
+      มี "{{location}}" ในระบบแล้ว
     </b-modal>
   </div>
 </template>
@@ -112,12 +114,20 @@ export default {
     getDatas() {
       axios.defaults.withCredentials = true;
       axios
-        .post("//localhost:8081/api/getallsensor", {})
+        .post("//localhost:8081/api/getDatas")
         .then(response => {
-          this.datas = response.data;
-          this.locations = response.data.map(function(obj) {
-            return obj.location;
-          });
+          if (response.data.confirm) {
+            this.datas = response.data.datas;
+            this.locations = response.data.datas.map(function(obj) {
+              return obj.location;
+            });
+          } else {
+            this.addName("");
+            this.addEmail("");
+            this.addStatus(false);
+            this.addPermission(false);
+            this.$router.push("/");
+          }
         })
         .catch(e => {
           console.error(e);
@@ -128,18 +138,31 @@ export default {
         this.$router.push("/graph/" + s);
       }
     },
+    showTime(t) {
+      if (t === null) return "ไม่พบข้อมูล";
+      else return new Date(t).toLocaleString();
+    },
     addLocation(m) {
       if (this.location.replace(/ /g, "").length > 0) {
         //connect to DB//
         axios.defaults.withCredentials = true;
         axios
-          .post("//localhost:8081/api/newlocation", { location: this.location })
+          .post("//localhost:8081/api/newLocation", { location: this.location })
           .then(response => {
             console.log(response.data);
-            this.confirm = response.data.confirm;
-            this.hideModal(m);
-            if (this.confirm) this.showModal("modal2");
-            else this.showModal("modal3");
+            if (response.data.confirm) {
+              this.hideModal(m);
+              if (response.data.err === "Same Collection!")
+                this.showModal("modal2");
+              else this.showModal("modal3");
+              this.getDatas();
+            } else {
+              this.addName("");
+              this.addEmail("");
+              this.addStatus(false);
+              this.addPermission(false);
+              this.$router.push("/");
+            }
           })
           .catch(e => {
             console.error(e);
@@ -152,6 +175,18 @@ export default {
     },
     hideModal(m) {
       this.$refs[m].hide();
+    },
+    addName(x) {
+      store.commit("addName", x);
+    },
+    addEmail(x) {
+      store.commit("addEmail", x);
+    },
+    addStatus(x) {
+      store.commit("addStatus", x);
+    },
+    addPermission(x) {
+      store.commit("addPermission", x);
     }
   }
 };

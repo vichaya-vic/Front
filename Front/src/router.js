@@ -9,15 +9,15 @@ import Adduser from './components/Adduser.vue'
 Vue.use(Router)
 
 export default new Router({
-    mode:'history',
+  mode: 'history',
   routes: [
     {
       path: '/',
-      redirect:'/login'
+      redirect: '/login'
     },
     {
-      path:'/login',
-      name:'login',
+      path: '/login',
+      name: 'login',
       component: Login
     },
     {
@@ -27,17 +27,22 @@ export default new Router({
     },
     {
       path: '/graph',
+      name: 'graph_index',
+      component: Graph
+    },
+    {
+      path: '/graph/:location',
       name: 'graph',
       component: Graph
     },
     {
-      path:'/user',
-      name:'user',
+      path: '/user',
+      name: 'user',
       component: User
     },
     {
-      path:'/adduser',
-      name:'adduser',
+      path: '/adduser',
+      name: 'adduser',
       component: Adduser
     }
   ]

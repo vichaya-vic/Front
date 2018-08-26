@@ -55,12 +55,13 @@ export default {
     logout() {
       axios.defaults.withCredentials = true;
       axios
-        .post("//localhost:8081/logout", {})
+        .post("//localhost:8081/setLogout", {})
         .then(response => {
           console.log(response);
-          store.commit("addName", "");
-          store.commit("addStatus", false);
-          store.commit("addPermission", false)
+          this.addName("");
+          this.addEmail("");
+          this.addStatus(false);
+          this.addPermission(false);
           this.$router.push("/"); //ไปหน้าlogin
         })
         .catch(e => {
@@ -75,6 +76,18 @@ export default {
     },
     hideModal() {
       this.$refs.myModalRef.hide();
+    },
+    addName(x) {
+      store.commit("addName", x);
+    },
+    addEmail(x) {
+      store.commit("addEmail", x);
+    },
+    addStatus(x) {
+      store.commit("addStatus", x);
+    },
+    addPermission(x) {
+      store.commit("addPermission", x);
     }
   }
 };

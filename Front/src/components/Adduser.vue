@@ -43,7 +43,7 @@
         </b-row>
         
         <b-row align-v="center" class="p-2">          
-          <b-col sm="3">ยืนยันรหัสผ่าน : </b-col >
+          <b-col sm="3">ยืนยันรหัสผ่าน : </b-col>
           <b-col>           
             <b-input v-model="form.CONPASS" size="md" required type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,12}"></b-input>
           </b-col >          
@@ -60,10 +60,10 @@
 
         <b-row align-h="center" class="pt-3">
           <b-form-group required > 
-            <input type="radio" id="two" :value="false" v-model="form.isAdmin">
-              <label class="p-2" for="user">ยูสเซอร์</label>
+            <input type="radio" :value="false" v-model="form.isAdmin">
+              <label class="p-2">ยูสเซอร์</label>
             <input type="radio" :value ="true" v-model="form.isAdmin">
-              <label class="p-2" for="admin">แอดมิน</label>
+              <label class="p-2">แอดมิน</label>
           </b-form-group>
         </b-row>
         
@@ -115,7 +115,7 @@ export default {
       if (this.func_check()) {
         axios.defaults.withCredentials = true;
         axios
-          .post("//localhost:8081/register", {
+          .post("//localhost:8081/newUser", {
             name: this.form.name,
             email: this.form.email,
             PASS: this.form.PASS,
@@ -125,11 +125,7 @@ export default {
           .then(response => {
             console.log(response.data);
             this.form.confirm = response.data.confirm;
-            if (!response.data.confirm) {
-              this.showAlert = true;
-              this.showSuccess = false;
-              this.textAlert = "มีผู้ใช้อีเมลล์นี้แล้ว";
-            } else {
+            if (response.data.confirm) {
               this.showAlert = false;
               this.showSuccess = true;
               this.form.name = "";
@@ -137,6 +133,18 @@ export default {
               this.form.PASS = "";
               this.form.CONPASS = "";
               this.form.isAdmin = false;
+            } else {
+              if (response.data.err === "same user") {
+                this.showAlert = true;
+                this.showSuccess = false;
+                this.textAlert = "มีผู้ใช้อีเมลล์นี้แล้ว";
+              } else if (response.data.err === "permission denied") {
+                this.addName("");
+                this.addEmail("");
+                this.addStatus(false);
+                this.addPermission(false);
+                this.$router.push("/");
+              }
             }
           })
           .catch(e => {
@@ -155,6 +163,18 @@ export default {
         return false;
       }
       return true;
+    },
+    addName(x) {
+      store.commit("addName", x);
+    },
+    addEmail(x) {
+      store.commit("addEmail", x);
+    },
+    addStatus(x) {
+      store.commit("addStatus", x);
+    },
+    addPermission(x) {
+      store.commit("addPermission", x);
     }
   }
 };
