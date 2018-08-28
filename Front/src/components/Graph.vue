@@ -8,27 +8,77 @@
             </template>
           </b-form-select>
       </b-input-group>
-
-      <b-row align-h="center" class="pt-3">
-        <b-col sm="2" class="pt-1">เลือกวันที่ :</b-col >
-
-        <b-col class="pt-1">
-          <Flatpickr :options="DateOptions"  v-model="my_filter.typedate"/>
-        </b-col>
-
-        <b-col>
-          <b-form-group>
-            <b-form-radio-group buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/>
-          </b-form-group>
-        </b-col>
-
-        <b-col>
-          <b-button  variant="success" v-on:click="Search">ค้นหา</b-button>
-        </b-col>
-      </b-row>
     </b-form-group> 
     
-    <b-tabs v-if="show"> 
+    <b-tabs>
+      <b-tab title="รายวัน" active v-on:click="getDay" >
+        <b-row align-h="center" class="pt-3">
+          <b-col sm="2" class="pt-1">เลือกวันที่ :</b-col >
+
+          <b-col class="pt-1">
+            <Flatpickr :options="DateOptions"  v-model="my_filter.typedate"/>
+          </b-col>
+
+          <b-col>
+            <b-form-group>
+              <b-form-radio-group buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/>
+            </b-form-group>
+          </b-col>
+
+          <b-col>
+            <b-button  variant="success" v-on:click="Search">ค้นหา</b-button>
+          </b-col>
+        </b-row>
+
+        <b-row v-if="show">
+          <b-col>
+            <range-slider class="slider pt-3 pl-3" :min=0 :max="timelabel.length-13" step="1" :disabled="false" v-on:input="OnSL" v-model="sliderValue" > </range-slider>
+          </b-col>
+
+          <b-col>
+            <b-form-group>
+              <b-form-radio-group buttons v-model="type_chart" :options="[{text:'กราฟเส้น',value:'line'},{text:'กราฟแท่ง',value:'bar'}]" button-variant="outline-secondary" class="pt-3" v-on:input="OnSL"/>
+            </b-form-group>
+          </b-col>
+        </b-row>
+
+        <b-row v-if="show">
+          <b-col><LC class="LineC" :chartData="this.dataa_uv" :options="this.option" /></b-col>
+          <b-col><LC :chartData="this.dataa_tmp" :options="this.option" /> </b-col>
+        </b-row>
+
+        <b-row v-if="show">
+          <b-col><LC :chartData="this.dataa_wind" :options="this.option" /> </b-col>
+          <b-col><LC :chartData="this.dataa_humid" :options="this.option" /> </b-col>
+        </b-row>
+      </b-tab>
+
+      <b-tab title="แสดงข้อมูลรายเดือน" v-on:click="getMonth">
+        <b-row v-if="show">
+          <b-col><LC class="LineC" :chartData="this.dataa_uv" :options="this.option" /></b-col>
+          <b-col><LC :chartData="this.dataa_tmp" :options="this.option" /> </b-col>
+        </b-row>
+
+        <b-row v-if="show">
+          <b-col><LC :chartData="this.dataa_wind" :options="this.option" /> </b-col>
+          <b-col><LC :chartData="this.dataa_humid" :options="this.option" /> </b-col>
+        </b-row>
+      </b-tab>
+       
+      <b-tab title="แสดงข้อมูลรายปี" v-on:click="getYear">
+        <b-row v-if="show">
+          <b-col><LC class="LineC" :chartData="this.dataa_uv" :options="this.option" /></b-col>
+          <b-col><LC :chartData="this.dataa_tmp" :options="this.option" /> </b-col>
+        </b-row>
+
+        <b-row v-if="show">
+          <b-col><LC :chartData="this.dataa_wind" :options="this.option" /> </b-col>
+          <b-col><LC :chartData="this.dataa_humid" :options="this.option" /> </b-col>
+        </b-row>  
+      </b-tab>   
+    </b-tabs>
+    
+    <!-- <b-tabs v-if="show"> 
       <b-tab title="อุณหภูมิ" active>
         <b-row>
           <b-col>
@@ -89,7 +139,7 @@
         </b-row>
         <LC :width="1000" :chartData="this.dataa_wind" :options="this.option" />
       </b-tab>
-    </b-tabs>
+    </b-tabs> -->
   </div>  
 </template>
 
@@ -110,7 +160,6 @@ export default {
         this.my_filter.location = null;
       else {
         this.my_filter.location = this.$route.params.location;
-        this.getDatas();
         this.show = true;
       }
       this.getLocations();
@@ -185,7 +234,7 @@ export default {
     },
     Search() {
       if (this.my_filter.location != null) {
-        this.getDatas();
+        this.getDay();
         this.show = true;
       }
     },
@@ -367,12 +416,12 @@ export default {
           console.error(e);
         });
     },
-    getDatas() {
+    getDay() {
       //setInterval(function(){   }, 3000);
       console.log(this.my_filter.typedate);
       axios.defaults.withCredentials = true;
       axios
-        .post("//localhost:8081/api/getGraph", {
+        .post("//localhost:8081/api/getDay", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
           typedate: this.my_filter.typedate
@@ -395,6 +444,74 @@ export default {
               this.humid_l = response.data.data.humid.slice(x - 6, x + 7);
               this.add_all();
             }
+          } else {
+            if (response.data.err === "permission denied") {
+              this.addName("");
+              this.addEmail("");
+              this.addStatus(false);
+              this.addPermission(false);
+              this.$router.push("/");
+            }
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    getMonth() {
+      this.C = false;
+      axios
+        .post("//localhost:8081/api/getMonth", {
+          location: this.my_filter.location,
+          inBuilding: this.my_filter.inBuilding,
+          month: "08"
+        })
+        .then(response => {
+          console.log(response.data);
+          if (response.data.confirm) {
+            if (response.data.data !== null) {
+              this.timelabel = response.data.data.time;
+              this.wind_l = response.data.data.wind;
+              this.tmp_l = response.data.data.tmp;
+              this.uv_l = response.data.data.uv;
+              this.humid_l = response.data.data.humid;
+              this.C = true;
+              this.add_all();
+            } else console.log("not find");
+          } else {
+            if (response.data.err === "permission denied") {
+              this.addName("");
+              this.addEmail("");
+              this.addStatus(false);
+              this.addPermission(false);
+              this.$router.push("/");
+            }
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    getYear() {
+      this.C = false;
+      axios
+        .post("//localhost:8081/api/getYear", {
+          location: this.my_filter.location,
+          inBuilding: this.my_filter.inBuilding,
+          year: "2018"
+        })
+        .then(response => {
+          console.log(response.data);
+          if (response.data.confirm) {
+            if (response.data.data !== null) {
+              this.timelabel = response.data.data.time;
+              this.wind_l = response.data.data.wind;
+              this.tmp_l = response.data.data.tmp;
+              this.uv_l = response.data.data.uv;
+              this.humid_l = response.data.data.humid;
+              this.C = true;
+              this.add_all();
+            } else console.log("not find");
           } else {
             if (response.data.err === "permission denied") {
               this.addName("");

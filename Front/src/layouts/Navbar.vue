@@ -14,17 +14,14 @@
                             <b-dropdown-item v-on:click="toPage('user')">ดูบัญชีผู้ใช้ทั้งหมด</b-dropdown-item>
                             <b-dropdown-item v-on:click="toPage('adduser')">เพิ่มบัญชีผู้ใช้ใหม่</b-dropdown-item>
                         </div>
-                        <b-dropdown-item v-on:click='showModal'>logout</b-dropdown-item>                        
+                        <b-dropdown-item v-on:click='showModal'>ออกจากระบบ</b-dropdown-item>                        
                     </b-nav-item-dropdown>
 
-                    <b-modal ref="myModalRef" hide-footer title="Warning">
-                        <div class="d-block text-center">
-                            <h3>จะออกมัย</h3>
-                        </div>
-                        <b-row>
-                            <b-col><b-btn class="mt-3" variant="outline-danger" block v-on:click="logout">Yes</b-btn></b-col>
-                            <b-col><b-btn class="mt-3" variant="outline-danger" block v-on:click="hideModal">No</b-btn></b-col>
-                        </b-row>
+                    <b-modal ref="myModalRef" hide-header>ต้องการออกจากระบบใช่หรือไม่
+                      <div slot="modal-footer">
+                        <b-btn size="sm" variant="secondary" v-on:click="hideModal">ยกเลิก</b-btn>
+                        <b-btn size="sm" variant="primary" v-on:click="logout">ตกลง</b-btn>
+                      </div>
                     </b-modal>
                 </b-navbar-nav>
             </b-collapse>
