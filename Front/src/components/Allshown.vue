@@ -125,7 +125,7 @@ export default {
     getDatas() {
       axios.defaults.withCredentials = true;
       axios
-        .post("http://pc.devinice.com:1111/api/getDatas")
+        .post("//localhost:8081/api/getDatas")
         .then(response => {
           if (response.data.confirm) {
             this.datas = response.data.datas;
@@ -158,9 +158,7 @@ export default {
         //connect to DB//
         axios.defaults.withCredentials = true;
         axios
-          .post("http://pc.devinice.com:1111/api/newLocation", {
-            location: this.location
-          })
+          .post("//localhost:8081/api/newLocation", { location: this.location })
           .then(response => {
             console.log(response.data);
             if (response.data.confirm) {
@@ -168,14 +166,13 @@ export default {
               this.showModal("modal2");
               this.getDatas();
             } else {
-              if (response.data.err === "permission denied") {
+              if (response.data.confirm === "permission denied") {
                 this.addName("");
                 this.addEmail("");
                 this.addStatus(false);
                 this.addPermission(false);
                 this.$router.push("/");
-                this.showModal("modal2");
-              } else if (response.data.err === "Same Collection!") {
+              } else if (response.data.confirm === "Same Collection!") {
                 this.hideModal(m);
                 this.showModal("modal3");
                 this.getDatas();

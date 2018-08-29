@@ -3,7 +3,7 @@
         <b-navbar toggleable="md" type="dark" variant="info">
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
             <b-navbar-brand v-if="!Status">NameProgram</b-navbar-brand>
-            <b-navbar-brand v-if="Status" v-on:click="toPage('')">NameProgram</b-navbar-brand>
+            <b-navbar-brand v-if="Status" v-on:click="toPage('')" :style="{ cursor: 'pointer'}">NameProgram</b-navbar-brand>
             <b-collapse v-if="Status" is-nav id="nav_collapse">                
                <!-- Right aligned nav items -->
                 <b-navbar-nav class="ml-auto">
@@ -52,7 +52,7 @@ export default {
     logout() {
       axios.defaults.withCredentials = true;
       axios
-        .post("http://pc.devinice.com:1111/setLogout", {})
+        .post("//localhost:8081/setLogout", {})
         .then(response => {
           console.log(response);
           this.addName("");

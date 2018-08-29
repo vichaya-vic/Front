@@ -66,8 +66,17 @@ app.post('/api/getDatabyTime', getDatabyTime.go)
 var getLocations = require('./tool/getLocations')
 app.post('/api/getLocations', getLocations.go)
 
-var getGraph = require('./tool/getGraph')
-app.post('/api/getGraph', getGraph.go)
+var getDay = require('./tool/getDay')
+app.post('/api/getDay', getDay.go)
+
+var getMonth = require('./tool/getMonth')
+app.post('/api/getMonth', getMonth.go)
+
+var getYear = require('./tool/getYear')
+app.post('/api/getYear', getYear.go)
+
+var getCustom = require('./tool/getCustom')
+app.post('/api/getCustom', getCustom.go)
 
 var examInput = require('./tool/examInput')
 app.post('/api/examInput', examInput.go)
