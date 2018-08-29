@@ -115,7 +115,7 @@ export default {
       if (this.func_check()) {
         axios.defaults.withCredentials = true;
         axios
-          .post("pc.devinice.com:1111/newUser", {
+          .post("http://pc.devinice.com:1111/newUser", {
             name: this.form.name,
             email: this.form.email,
             PASS: this.form.PASS,

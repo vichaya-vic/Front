@@ -398,7 +398,7 @@ export default {
     getLocations() {
       axios.defaults.withCredentials = true;
       axios
-        .post("pc.devinice.com:1111/api/getLocations")
+        .post("http://pc.devinice.com:1111/api/getLocations")
         .then(response => {
           if (response.data.confirm) {
             this.locations = response.data.locations.map(function(obj) {
@@ -421,7 +421,7 @@ export default {
       console.log(this.my_filter.typedate);
       axios.defaults.withCredentials = true;
       axios
-        .post("pc.devinice.com:1111/api/getDay", {
+        .post("http://pc.devinice.com:1111/api/getDay", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
           typedate: this.my_filter.typedate
@@ -461,7 +461,7 @@ export default {
     getMonth() {
       this.C = false;
       axios
-        .post("pc.devinice.com:1111/api/getMonth", {
+        .post("http://pc.devinice.com:1111/api/getMonth", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
           month: "08"
@@ -495,7 +495,7 @@ export default {
     getYear() {
       this.C = false;
       axios
-        .post("pc.devinice.com:1111/api/getYear", {
+        .post("http://pc.devinice.com:1111/api/getYear", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
           year: "2018"

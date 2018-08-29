@@ -58,7 +58,7 @@ export default {
       axios.defaults.withCredentials = true; //set cookie for back end
 
       axios
-        .post("pc.devinice.com:1111/setLogin", {
+        .post("http://pc.devinice.com:1111/setLogin", {
           email: this.form.email,
           PASS: this.form.password
         })

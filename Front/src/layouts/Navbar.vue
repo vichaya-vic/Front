@@ -52,7 +52,7 @@ export default {
     logout() {
       axios.defaults.withCredentials = true;
       axios
-        .post("pc.devinice.com:1111/setLogout", {})
+        .post("http://pc.devinice.com:1111/setLogout", {})
         .then(response => {
           console.log(response);
           this.addName("");
