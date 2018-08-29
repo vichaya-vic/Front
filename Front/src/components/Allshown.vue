@@ -158,21 +158,28 @@ export default {
         //connect to DB//
         axios.defaults.withCredentials = true;
         axios
-          .post("http://pc.devinice.com:1111/api/newLocation", { location: this.location })
+          .post("http://pc.devinice.com:1111/api/newLocation", {
+            location: this.location
+          })
           .then(response => {
             console.log(response.data);
             if (response.data.confirm) {
               this.hideModal(m);
-              if (response.data.err === "Same Collection!")
-                this.showModal("modal2");
-              else this.showModal("modal3");
+              this.showModal("modal2");
               this.getDatas();
             } else {
-              this.addName("");
-              this.addEmail("");
-              this.addStatus(false);
-              this.addPermission(false);
-              this.$router.push("/");
+              if (response.data.err === "permission denied") {
+                this.addName("");
+                this.addEmail("");
+                this.addStatus(false);
+                this.addPermission(false);
+                this.$router.push("/");
+                this.showModal("modal2");
+              } else if (response.data.err === "Same Collection!") {
+                this.hideModal(m);
+                this.showModal("modal3");
+                this.getDatas();
+              }
             }
           })
           .catch(e => {
