@@ -125,7 +125,7 @@ export default {
     getDatas() {
       axios.defaults.withCredentials = true;
       axios
-        .post("//localhost:8081/api/getDatas")
+        .post("http://pc.devinice.com:1111/api/getDatas")
         .then(response => {
           if (response.data.confirm) {
             this.datas = response.data.datas;
@@ -158,7 +158,7 @@ export default {
         //connect to DB//
         axios.defaults.withCredentials = true;
         axios
-          .post("//localhost:8081/api/newLocation", { location: this.location })
+          .post("http://pc.devinice.com:1111/api/newLocation", { location: this.location })
           .then(response => {
             console.log(response.data);
             if (response.data.confirm) {
