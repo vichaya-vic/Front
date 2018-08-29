@@ -74,7 +74,7 @@ export default {
       //get data form DB//
       axios.defaults.withCredentials = true;
       axios
-        .post("//localhost:8081/getUsers", {})
+        .post("pc.devinice.com:1111/getUsers", {})
         .then(response => {
           console.log(response.data);
           if (response.data.confirm) {
@@ -106,7 +106,7 @@ export default {
       console.log("del");
       axios.defaults.withCredentials = true;
       axios
-        .post("//localhost:8081/delUser", {
+        .post("pc.devinice.com:1111/delUser", {
           name: this.deleted.name,
           email: this.deleted.email,
           isAdmin: this.deleted.isAdmin
