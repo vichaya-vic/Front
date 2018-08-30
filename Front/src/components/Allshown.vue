@@ -9,6 +9,7 @@
           </b-form-select>
           <b-button v-on:click="toGraph(selected)" variant="info">ค้นหา</b-button>
           <b-button v-if="Permission" v-on:click="showModal('modal1')" variant="danger" class="ml-1 px-3">เพิ่ม</b-button>
+          <b-button v-if="Permission" v-on:click="gendata" variant="danger" class="ml-1 px-3">จำลอง</b-button>
       </b-input-group>
     </b-form-group>
 
@@ -202,7 +203,24 @@ export default {
     },
     addPermission(x) {
       store.commit("addPermission", x);
-    }
+    },
+    gendata() {
+      for (var i = 1; i <= 31; i++) {
+        axios
+          .post("//pc.devinice.com:1111/api/test", {
+            location: "หน่วยฝึกทหารใหม่ที่ 1 พัน.บร.กบร.กช.(ค่ายภาณุรังษี)",
+            inBuilding: true,
+            date: "2018/08/" + i,
+            data: {
+              uv: 1,
+              wind: 1,
+              humidity: 1,
+              temperature: 1
+            }
+          })
+          .then(response => {});
+      }
+    },
   }
 };
 </script>
