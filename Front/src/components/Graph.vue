@@ -28,6 +28,10 @@
           <b-col>
             <b-button  variant="success" v-on:click="Search('Day')">ค้นหา</b-button>
           </b-col>
+
+          <b-col v-if="show">
+            <range-slider class="slider pt-3 pl-3" :min=0 :max="timelabel.length-13" step="1" :disabled="false" v-on:input="OnSL" v-model="sliderValue" > </range-slider>
+          </b-col>
         </b-row>
       </b-tab>
 
@@ -119,10 +123,6 @@
     <b-container v-if="show">
       <b-row>
           <b-col>
-            <range-slider class="slider pt-3 pl-3" :min=0 :max="timelabel.length-13" step="1" :disabled="false" v-on:input="add_all" v-model="sliderValue" > </range-slider>
-          </b-col>
-
-          <b-col>
             <b-form-group>
               <b-form-radio-group buttons v-model="type_chart" :options="[{text:'กราฟเส้น',value:'line'},{text:'กราฟแท่ง',value:'bar'}]" button-variant="outline-secondary" class="pt-3" v-on:input="add_all"/>
             </b-form-group>
@@ -172,25 +172,25 @@ export default {
         location: null,
         inBuilding: true,
         typedate: new Date().toDateString(),
-        month:new Date().getMonth()+1,
-        year:new Date().getFullYear(),
-        Ftime:"12:00",
-        Ttime:"12:00",
-        Range_Date:null
+        month: new Date().getMonth() + 1,
+        year: new Date().getFullYear(),
+        Ftime: "12:00",
+        Ttime: "12:00",
+        Range_Date: null
       },
       db_month: [
-        { text: "มกราคม"      ,value:1 },
-        { text: "กุมภาพันธ์"    ,value:2 },
-        { text: "มีนาคม"      ,value:3},
-        { text: "เมษายน"     ,value:4 },
-        { text: "พฤษภาคม"    ,value:5},
-        { text: "มิถุนายน"     ,value:6 },
-        { text: "กรกฎาคม"    ,value:7},
-        { text: "สิงหาคม"     ,value:8 },
-        { text: "กันยายน"     ,value:9},
-        { text: "ตุลาคม"     ,value:10 },
-        { text: "พฤ"        ,value:11 },
-        { text: "กันยายน"     ,value:12}
+        { text: "มกราคม", value: 1 },
+        { text: "กุมภาพันธ์", value: 2 },
+        { text: "มีนาคม", value: 3 },
+        { text: "เมษายน", value: 4 },
+        { text: "พฤษภาคม", value: 5 },
+        { text: "มิถุนายน", value: 6 },
+        { text: "กรกฎาคม", value: 7 },
+        { text: "สิงหาคม", value: 8 },
+        { text: "กันยายน", value: 9 },
+        { text: "ตุลาคม", value: 10 },
+        { text: "พฤ", value: 11 },
+        { text: "กันยายน", value: 12 }
       ],
       config: {
         //mode: "range",
@@ -251,6 +251,13 @@ export default {
       dataa_humid: {},
       type_chart: "line",
       sliderValue: 0,
+      form_data: {
+        humid: [],
+        uv: [],
+        tmp: [],
+        wind: [],
+        time: []
+      },
     };
   },
   computed: {
@@ -261,12 +268,91 @@ export default {
   methods: {
     Search(m) {
       if (this.my_filter.location != null) {
-        if(m==='Day') this.getDay();
-        else if(m==='Month') this.getMonth();
-        else if(m==='Year') this.getYear();
-        else if(m==='Custom') this.getCustom();
+        if (m === "Day") this.getDay();
+        else if (m === "Month") this.getMonth();
+        else if (m === "Year") this.getYear();
+        else if (m === "Custom") this.getCustom();
         this.show = true;
       }
+    },
+    OnSL() {
+      this.timelabel = this.form_data.time;
+      this.dataa_uv = {
+        labels: this.timelabel.slice(this.sliderValue, this.sliderValue + 13),
+        datasets: [
+          {
+            label: "UV",
+            borderColor: "Tomato",
+            pointBackgroundColor: "Tomato",
+            borderWidth: 3,
+            pointBorderColor: "Tomato",
+            backgroundColor:
+              this.type_chart == "line" ? this.gradient : "Tomato",
+            data: this.form_data.uv.slice(
+              this.sliderValue,
+              this.sliderValue + 13
+            ),
+            type: this.type_chart
+          }
+        ]
+      };
+      this.dataa_tmp = {
+        labels: this.timelabel.slice(this.sliderValue, this.sliderValue + 13),
+        datasets: [
+          {
+            label: "Temperature",
+            borderColor: "DodgerBlue",
+            pointBackgroundColor: "DodgerBlue",
+            borderWidth: 3,
+            pointBorderColor: "DodgerBlue",
+            backgroundColor:
+              this.type_chart == "line" ? this.gradient : "DodgerBlue",
+            data: this.form_data.tmp.slice(
+              this.sliderValue,
+              this.sliderValue + 13
+            ),
+            type: this.type_chart
+          }
+        ]
+      };
+      this.dataa_wind = {
+        labels: this.timelabel.slice(this.sliderValue, this.sliderValue + 13),
+        datasets: [
+          {
+            label: "Wind",
+            borderColor: "Orange",
+            pointBackgroundColor: "Orange",
+            borderWidth: 3,
+            pointBorderColor: "Orange",
+            backgroundColor:
+              this.type_chart == "line" ? this.gradient : "Orange",
+            data: this.form_data.wind.slice(
+              this.sliderValue,
+              this.sliderValue + 13
+            ),
+            type: this.type_chart
+          }
+        ]
+      };
+      this.dataa_humid = {
+        labels: this.timelabel.slice(this.sliderValue, this.sliderValue + 13),
+        datasets: [
+          {
+            label: "humid",
+            borderColor: "MediumSeaGreen",
+            pointBackgroundColor: "MediumSeaGreen",
+            borderWidth: 3,
+            pointBorderColor: "MediumSeaGreen",
+            backgroundColor:
+              this.type_chart == "line" ? this.gradient : "MediumSeaGreen",
+            data: this.form_data.humid.slice(
+              this.sliderValue,
+              this.sliderValue + 13
+            ),
+            type: this.type_chart
+          }
+        ]
+      };
     },
     add_uv(x) {
       this.dataa_uv = {
@@ -380,15 +466,19 @@ export default {
         .then(response => {
           console.log(response.data);
           if (response.data.confirm) {
-              var x = 24;
+            this.form_data.time = response.data.data.time;
+            this.form_data.uv = response.data.data.uv;
+            this.form_data.tmp = response.data.data.tmp;
+            this.form_data.humid = response.data.data.humid;
+            this.form_data.wind = response.data.data.wind;
+            var x = 24;
 
-              this.timelabel = response.data.data.time.slice(x - 6, x + 7);
-              this.wind_l = response.data.data.wind.slice(x - 6, x + 7);
-              this.tmp_l = response.data.data.tmp.slice(x - 6, x + 7);
-              this.uv_l = response.data.data.uv.slice(x - 6, x + 7);
-              this.humid_l = response.data.data.humid.slice(x - 6, x + 7);
-              this.add_all();
-            
+            this.timelabel = response.data.data.time.slice(x - 6, x + 7);
+            this.wind_l = response.data.data.wind.slice(x - 6, x + 7);
+            this.tmp_l = response.data.data.tmp.slice(x - 6, x + 7);
+            this.uv_l = response.data.data.uv.slice(x - 6, x + 7);
+            this.humid_l = response.data.data.humid.slice(x - 6, x + 7);
+            this.add_all();
           } else {
             if (response.data.err === "permission denied") {
               this.addName("");
