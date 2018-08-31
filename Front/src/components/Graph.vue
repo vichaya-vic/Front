@@ -366,13 +366,13 @@ export default {
             pointBorderColor: "Tomato",
             backgroundColor:
               this.type_chart == "line" ? this.gradient : "Tomato",
-            data: this.uv_l.slice(x, x + 13),
+            data: this.uv_l,
             type: this.type_chart
           }
         ]
       };
     },
-    add_tmp(x) {
+    add_tmp() {
       this.dataa_tmp = {
         labels: this.timelabel,
         datasets: [
@@ -384,13 +384,13 @@ export default {
             pointBorderColor: "DodgerBlue",
             backgroundColor:
               this.type_chart == "line" ? this.gradient : "DodgerBlue",
-            data: this.tmp_l.slice(x, x + 13),
+            data: this.tmp_l,
             type: this.type_chart
           }
         ]
       };
     },
-    add_wind(x) {
+    add_wind() {
       this.dataa_wind = {
         labels: this.timelabel,
         datasets: [
@@ -402,13 +402,13 @@ export default {
             pointBorderColor: "Orange",
             backgroundColor:
               this.type_chart == "line" ? this.gradient : "Orange",
-            data: this.wind_l.slice(x, x + 13),
+            data: this.wind_l,
             type: this.type_chart
           }
         ]
       };
     },
-    add_humid(x) {
+    add_humid() {
       this.dataa_humid = {
         labels: this.timelabel,
         datasets: [
@@ -420,17 +420,17 @@ export default {
             pointBorderColor: "MediumSeaGreen",
             backgroundColor:
               this.type_chart == "line" ? this.gradient : "MediumSeaGreen",
-            data: this.humid_l.slice(x, x + 13),
+            data: this.humid_l,
             type: this.type_chart
           }
         ]
       };
     },
     add_all() {
-      this.add_uv(this.sliderValue);
-      this.add_tmp(this.sliderValue);
-      this.add_wind(this.sliderValue);
-      this.add_humid(this.sliderValue);
+      this.add_uv();
+      this.add_tmp();
+      this.add_wind();
+      this.add_humid();
     },
     getLocations() {
       axios.defaults.withCredentials = true;
@@ -510,6 +510,7 @@ export default {
               this.tmp_l = response.data.data.tmp;
               this.uv_l = response.data.data.uv;
               this.humid_l = response.data.data.humid;
+              this.sliderValue=0
               this.add_all();
             } else console.log("not find");
           } else {
