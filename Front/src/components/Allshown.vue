@@ -15,45 +15,48 @@
 
     <b-container class="justify-content-md-center">
       <b-row>
-        <b-col sm="4" v-for="i in locations.length" v-bind:key="i">
+        <b-col col sm="12" md="5" lg="4" v-for="i in locations.length" v-bind:key="i">
           <b-button style="width:100%" size="md" class="p-0 mt-5" variant="outline-info" v-on:click="toGraph(locations[i-1])">
-            <b-card-body :title="locations[i-1]">
+            <b-card-body>
+              <b-col>
+                <h4>{{locations[i-1]}}</h4>
+              </b-col>
               <hr class="my-4">
                 <b-row>
-                  <b-col sm="4">
+                  <b-col sm="4" md="4" lg="4" col cols="3">
                     <h5><b-badge :variant="datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.flag">สีธง</b-badge></h5>
                   </b-col>
 
-                  <b-col sm="4"></b-col>
+                  <b-col sm="4" md="4" lg="4" col cols="5"></b-col>
 
-                  <b-col sm="4">
+                  <b-col sm="4" md="4" lg="4" col cols="3">
                     <h5><b-badge :variant="datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.flag">สีธง</b-badge></h5>
                   </b-col>
                 </b-row>
               <b-row align-h="center">
-                <b-col sm="4" class="text-center">ในอาคาร</b-col>
-                <b-col sm="4" class="text-center"></b-col>
-                <b-col sm="4" class="text-center">นอกอาคาร</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">ในอาคาร</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="5" class="text-center"></b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">นอกอาคาร</b-col>
               </b-row>
               <b-row align-h="center">
-                <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.temperature}}</b-col>
-                <b-col sm="4" class="text-center">อุณหภูมิ °C</b-col>
-                <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.temperature}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.temperature}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">อุณหภูมิ °C</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.temperature}}</b-col>
               </b-row>
               <b-row align-h="center">
-                <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.humidity}}</b-col>
-                <b-col sm="4" class="text-center">ความชื้น %</b-col>
-                <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.humidity}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.humidity}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">ความชื้น %</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.humidity}}</b-col>
               </b-row>
               <b-row align-h="center">
-                <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.uv}}</b-col>
-                <b-col sm="4" class="text-center">ดัชนี UV</b-col>
-                <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.uv}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.uv}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">ดัชนี UV</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.uv}}</b-col>
               </b-row>
               <b-row align-h="center">
-                <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.wind}}</b-col>
-                <b-col sm="4" class="text-center">แรงลม กม./ชม.</b-col>
-                <b-col sm="4" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.wind}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.wind}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">แรงลม กม./ชม.</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.wind}}</b-col>
               </b-row>
             </b-card-body>
             <b-card-footer class="text-right bg-light py-0">
@@ -62,7 +65,7 @@
                 (กลางแจ้ง) {{showTime(datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.time)}}
               </small>
             </b-card-footer>
-        </b-button>
+          </b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -224,3 +227,13 @@ export default {
   }
 };
 </script>
+
+<style>
+h4 {
+    overflow:hidden;
+    white-space:nowrap;
+    -ms-text-overflow:ellipsis;
+    text-overflow:ellipsis;
+    width:100%;
+}
+</style>
