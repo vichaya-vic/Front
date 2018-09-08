@@ -31,7 +31,7 @@ export default new Router({
       component: Graph
     },
     {
-      path: '/graph/:location',
+      path: '/graph/:key',
       name: 'graph',
       component: Graph
     },
