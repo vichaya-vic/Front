@@ -11,7 +11,7 @@
     </b-form-group> 
     
     <b-tabs>
-      <b-tab title="แสดงข้อมูลรายวัน" active v-on:click="show=false" >
+      <b-tab title="แสดงข้อมูลรายวัน" active v-on:click="clearData" >
         <b-row align-h="center" class="pt-3">
           <b-col sm="2" class="pt-1">เลือกวันที่ :</b-col >
 
@@ -35,7 +35,7 @@
         </b-row>
       </b-tab>
 
-      <b-tab title="แสดงข้อมูลรายเดือน" v-on:click="show=false">
+      <b-tab title="แสดงข้อมูลรายเดือน" v-on:click="clearData">
         <b-row align-h="center" class="pt-3">
           <b-col sm="2" class="pt-1">เลือกเดือน :</b-col >
             
@@ -61,7 +61,7 @@
         </b-row>
       </b-tab>
        
-      <b-tab title="แสดงข้อมูลรายปี" v-on:click="show=false">
+      <b-tab title="แสดงข้อมูลรายปี" v-on:click="clearData">
         <b-row align-h="center" class="pt-3">
           <b-col sm="2" class="pt-1">เลือกปี :</b-col >
             
@@ -85,7 +85,7 @@
         </b-row>
       </b-tab>
 
-      <b-tab title="แสดงข้อมูลแบบกำหนดเอง" v-on:click="show=false" >
+      <b-tab title="แสดงข้อมูลแบบกำหนดเอง" v-on:click="clearData" >
         <b-row align-h="center" class="pt-3">
           <b-col sm="2" class="pt-1">เลือกวันที่ :</b-col >
 
@@ -120,7 +120,7 @@
       </b-tab>    
     </b-tabs>
 
-    <b-container v-if="show">
+    <b-container v-if="show&&!showAlert">
       <b-row>
           <b-col>
             <b-form-group>
@@ -138,6 +138,10 @@
         <b-col><LC :chartData="this.dataa_humid" :options="this.option" /> </b-col>
       </b-row>
     </b-container>
+
+    <b-alert variant="danger" dismissible :show="showAlert" @dismissed="showAlert=false">
+      ไม่พบข้อมูลนี้ในระบบ
+    </b-alert>
   </div>  
 </template>
 
@@ -154,13 +158,6 @@ export default {
   beforeMount() {
     if (!this.Status) this.$router.push("/login");
     else {
-      if (this.$route.params.location === undefined)
-        this.my_filter.location = null;
-      else {
-        this.my_filter.location = this.$route.params.location;
-        this.show = true;
-        this.getDay();
-      }
       this.getLocations();
     }
   },
@@ -168,10 +165,11 @@ export default {
     return {
       locations: [],
       show: false,
+      showAlert: false,
       my_filter: {
         location: null,
         inBuilding: true,
-        typedate: new Date().toDateString(),
+        typedate: new Date().toLocaleDateString(),
         month: new Date().getMonth() + 1,
         year: new Date().getFullYear(),
         Ftime: "12:00",
@@ -189,12 +187,12 @@ export default {
         { text: "สิงหาคม", value: 8 },
         { text: "กันยายน", value: 9 },
         { text: "ตุลาคม", value: 10 },
-        { text: "พฤ", value: 11 },
-        { text: "กันยายน", value: 12 }
+        { text: "พฤศจิกายน", value: 11 },
+        { text: "ธันวาคม", value: 12 }
       ],
       config: {
         //mode: "range",
-        dateFormat: "Y/m/d",
+        dateFormat: "m/d/Y",
         defaultDate: new Date(),
         maxDate: new Date()
       },
@@ -257,7 +255,7 @@ export default {
         tmp: [],
         wind: [],
         time: []
-      },
+      }
     };
   },
   computed: {
@@ -266,6 +264,10 @@ export default {
     }
   },
   methods: {
+    clearData() {
+      this.show = false;
+      this.showAlert = false;
+    },
     Search(m) {
       if (this.my_filter.location != null) {
         if (m === "Day") this.getDay();
@@ -438,9 +440,16 @@ export default {
         .post("http://pc.devinice.com:1111/api/getLocations")
         .then(response => {
           if (response.data.confirm) {
-            this.locations = response.data.locations.map(function(obj) {
+            this.locations = response.data.datas.map(function(obj) {
               return obj.location;
             });
+            if (this.$route.params.key === undefined) {
+              this.my_filter.location = null;
+            } else {
+              this.my_filter.location = response.data.datas[response.data.datas.findIndex(x => x.key == this.$route.params.key)].location;
+              this.show = true;
+              this.getDay();
+            }
           } else {
             this.addName("");
             this.addEmail("");
@@ -479,6 +488,8 @@ export default {
             this.uv_l = response.data.data.uv.slice(x - 6, x + 7);
             this.humid_l = response.data.data.humid.slice(x - 6, x + 7);
             this.add_all();
+            this.show = true;
+            this.showAlert = false;
           } else {
             if (response.data.err === "permission denied") {
               this.addName("");
@@ -486,6 +497,8 @@ export default {
               this.addStatus(false);
               this.addPermission(false);
               this.$router.push("/");
+            } else if (response.data.err === "no data") {
+              this.showAlert = true;
             }
           }
         })
@@ -510,9 +523,11 @@ export default {
               this.tmp_l = response.data.data.tmp;
               this.uv_l = response.data.data.uv;
               this.humid_l = response.data.data.humid;
-              this.sliderValue=0
+              this.sliderValue = 0;
               this.add_all();
-            } else console.log("not find");
+              this.show = true;
+              this.showAlert = false;
+            }
           } else {
             if (response.data.err === "permission denied") {
               this.addName("");
@@ -520,6 +535,8 @@ export default {
               this.addStatus(false);
               this.addPermission(false);
               this.$router.push("/");
+            } else if (response.data.err === "no data") {
+              this.showAlert = true;
             }
           }
         })
@@ -545,7 +562,9 @@ export default {
               this.uv_l = response.data.data.uv;
               this.humid_l = response.data.data.humid;
               this.add_all();
-            } else console.log("not find");
+              this.show = true;
+              this.showAlert = false;
+            }
           } else {
             if (response.data.err === "permission denied") {
               this.addName("");
@@ -553,6 +572,8 @@ export default {
               this.addStatus(false);
               this.addPermission(false);
               this.$router.push("/");
+            } else if (response.data.err === "no data") {
+              this.showAlert = true;
             }
           }
         })
@@ -580,7 +601,9 @@ export default {
               this.uv_l = response.data.data.uv;
               this.humid_l = response.data.data.humid;
               this.add_all();
-            } else console.log("not find");
+              this.show = true;
+              this.showAlert = false;
+            }
           } else {
             if (response.data.err === "permission denied") {
               this.addName("");
@@ -588,6 +611,8 @@ export default {
               this.addStatus(false);
               this.addPermission(false);
               this.$router.push("/");
+            } else if (response.data.err === "no data") {
+              this.showAlert = true;
             }
           }
         })
