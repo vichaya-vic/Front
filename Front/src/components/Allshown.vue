@@ -23,25 +23,24 @@
 
     <b-container class="text-center">
       <b-row>
-                    v-if="datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.flag||filter===null" 
         <b-col col sm="12" md="5" lg="4" v-for="i in locations.length" v-bind:key="i">
           <b-button style="width:100%" size="md" class="p-0 mt-3" variant="outline-info" 
                     v-on:click="toGraph(locations[i-1])" 
+                    v-if="datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.flag===filter||datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.flag||filter===null" 
                     v-b-tooltip.hover :title="locations[i-1]">
-              <b-col>
             <b-card-body>
+              <b-col>
                 <h4>{{locations[i-1]}}</h4>
               </b-col>
-            <b-card-header class="py-3" :header-bg-variant="datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.flag"></b-card-header>
               <hr class="my-4">
                 <b-row>
-                  <b-col sm="4">
+                  <b-col sm="4" md="4" lg="4" col cols="3">
                     <h5><b-badge :variant="datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.flag">สีธง</b-badge></h5>
                   </b-col>
 
-                  <b-col sm="4"></b-col>
+                  <b-col sm="4" md="4" lg="4" col cols="5"></b-col>
 
-                  <b-col sm="4">
+                  <b-col sm="4" md="4" lg="4" col cols="3">
                     <h5><b-badge :variant="datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.flag">สีธง</b-badge></h5>
                   </b-col>
                 </b-row>
@@ -231,3 +230,13 @@ export default {
   }
 };
 </script>
+
+<style>
+h4 {
+  overflow: hidden;
+  white-space: nowrap;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+</style>
