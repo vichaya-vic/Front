@@ -18,62 +18,52 @@
                           button-variant="outline-info"
                           size="md"
                           v-model="filter"
-                          :options="flags"/>
+                          :options="flags"
+                          v-on:input="getDatas"/>
     </b-form-group>
 
     <b-container class="text-center">
       <b-row>
-        <b-col col sm="12" md="5" lg="4" v-for="i in locations.length" v-bind:key="i">
+        <b-col col sm="12" md="5" lg="4" v-for="i in datas.length" v-bind:key="i">
           <b-button style="width:100%" size="md" class="p-0 mt-3" variant="outline-info" 
-                    v-on:click="toGraph(locations[i-1])" 
-                    v-if="datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.flag===filter||datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.flag||filter===null" 
-                    v-b-tooltip.hover :title="locations[i-1]">
+                    v-on:click="toGraph(datas[i-1].location)" 
+                    v-b-tooltip.hover :title="datas[i-1].location">
+            <b-card-header class="py-3" :header-bg-variant="datas[i-1].outdoor.flag"></b-card-header>
             <b-card-body>
               <b-col>
-                <h4>{{locations[i-1]}}</h4>
+                <h4>{{datas[i-1].location}}</h4>
               </b-col>
               <hr class="my-4">
-                <b-row>
-                  <b-col sm="4" md="4" lg="4" col cols="3">
-                    <h5><b-badge :variant="datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.flag">สีธง</b-badge></h5>
-                  </b-col>
-
-                  <b-col sm="4" md="4" lg="4" col cols="5"></b-col>
-
-                  <b-col sm="4" md="4" lg="4" col cols="3">
-                    <h5><b-badge :variant="datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.flag">สีธง</b-badge></h5>
-                  </b-col>
-                </b-row>
               <b-row align-h="center">
                 <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">ในอาคาร</b-col>
                 <b-col sm="4" md="4" lg="4" col cols="5" class="text-center"></b-col>
                 <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">นอกอาคาร</b-col>
               </b-row>
               <b-row align-h="center">
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.temperature}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[i-1].indoor.temperature}}</b-col>
                 <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">อุณหภูมิ °C</b-col>
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.temperature}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[i-1].outdoor.temperature}}</b-col>
               </b-row>
               <b-row align-h="center">
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.humidity}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[i-1].indoor.humidity}}</b-col>
                 <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">ความชื้น %</b-col>
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.humidity}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[i-1].outdoor.humidity}}</b-col>
               </b-row>
               <b-row align-h="center">
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.uv}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[i-1].indoor.uv}}</b-col>
                 <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">ดัชนี UV</b-col>
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.uv}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[i-1].outdoor.uv}}</b-col>
               </b-row>
               <b-row align-h="center">
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.wind}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[i-1].indoor.wind}}</b-col>
                 <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">แรงลม กม./ชม.</b-col>
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.wind}}</b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[i-1].outdoor.wind}}</b-col>
               </b-row>
             </b-card-body>
             <b-card-footer class="text-right bg-light py-0">
               <small class="text-muted font-italic font-weight-light" style="height: 20%">
-                ข้อมูลเมื่อ (ในร่ม) {{showTime(datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.time)}}<br>
-                (กลางแจ้ง) {{showTime(datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.time)}}
+                ข้อมูลเมื่อ (ในร่ม) {{showTime(datas[i-1].indoor.time)}}<br>
+                (กลางแจ้ง) {{showTime(datas[i-1].outdoor.time)}}
               </small>
             </b-card-footer>
           </b-button>
@@ -107,7 +97,6 @@
     </b-modal>
   </div>
 </template>
-
 <script>
 import store from "../vuex/store.js";
 import Vuex from "vuex";
@@ -152,10 +141,19 @@ export default {
         .post("http://pc.devinice.com:1111/api/getDatas")
         .then(response => {
           if (response.data.confirm) {
-            this.datas = response.data.datas;
-            this.locations = response.data.datas.map(function(obj) {
-              return obj.location;
-            });
+            var locations = [];
+            var datas = [];
+            for (var i = 0; i < response.data.datas.length; i++) {
+              locations.push(response.data.datas[i].location);
+              if (
+                response.data.datas[i].outdoor.flag === this.filter ||
+                this.filter === null
+              ) {
+                datas.push(response.data.datas[i]);
+              }
+            }
+            this.locations = locations;
+            this.datas = datas;
           } else {
             this.addName("");
             this.addEmail("");
