@@ -1,5 +1,7 @@
 #!/bin/bash
 git pull
+git checkout deploy
+git pull
 sudo docker stop frontend
 sudo docker container rm frontend
 cd ./Front && sudo docker build -t denice/nginxapp .

@@ -7,8 +7,14 @@
                 <option :value="null" disabled>========== กรุณาเลือกสถานที่ ==========</option>
             </template>
           </b-form-select>
-          <b-button v-on:click="toGraph(selected)" variant="info">ค้นหา</b-button>
-          <b-button v-if="Permission" v-on:click="showModal('modal1')" variant="danger" class="ml-1 px-3">เพิ่ม</b-button>
+          <!-- <b-button v-on:click="toGraph(selected)" variant="info">ค้นหา</b-button> -->
+          <b-button v-on:click="toGraph(selected)" variant="info" v-b-tooltip.hover title="ค้นหา">
+            <b-img :src="require('../assets/search.png')" center width="20" height="20"/>
+          </b-button>
+          <!-- <b-button v-if="Permission" v-on:click="showModal('modal1')" variant="danger" class="ml-1 px-3">เพิ่ม</b-button> -->
+          <b-button v-if="Permission" v-on:click="showModal('modal1')" variant="danger" class="ml-1" v-b-tooltip.hover title="เพิ่มสถานที่">
+            <b-img :src="require('../assets/add.png')" center width="20" height="20"/>
+          </b-button>
           <!-- <b-button v-if="Permission" v-on:click="gendata" variant="danger" class="ml-1 px-3">จำลอง</b-button> -->
       </b-input-group>
     </b-form-group>
@@ -18,52 +24,64 @@
                           button-variant="outline-info"
                           size="md"
                           v-model="filter"
-                          :options="flags"/>
+                          :options="flags"
+                          v-on:input="getDatas"/>
     </b-form-group>
 
     <b-container class="text-center">
       <b-row>
-        <b-col col sm="12" md="5" lg="4" v-for="i in locations.length" v-bind:key="i">
+        <b-col col sm="12" md="6" lg="6" v-for="i in datas.length" v-bind:key="i">
           <b-button style="width:100%" size="md" class="p-0 mt-3" variant="outline-info" 
-                    v-on:click="toGraph(locations[i-1])" 
-                    v-if="datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.flag||filter===null" 
-                    v-b-tooltip.hover :title="locations[i-1]">
-            <b-card-header class="py-3" :header-bg-variant="datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.flag"></b-card-header>
+                    v-on:click="toGraph(datas[i-1].location)" 
+                    v-b-tooltip.hover :title="datas[i-1].location">
+            <b-card-header class="py-3" :header-bg-variant="datas[i-1].outdoor.flag"></b-card-header>
             <b-card-body>
               <b-col>
-                <h4>{{locations[i-1]}}</h4>
+                <h3>{{datas[i-1].location}}</h3>
               </b-col>
               <hr class="my-4">
-              <b-row align-h="center">
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">ในอาคาร</b-col>
-                <b-col sm="4" md="4" lg="4" col cols="5" class="text-center"></b-col>
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">นอกอาคาร</b-col>
+               <b-row align-h="center" align-v="center">
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center"><h4>ในอาคาร</h4></b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center"></b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center"><h4>นอกอาคาร</h4></b-col>
+               </b-row>
+               <b-row align-h="center" align-v="center">
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center"><h5>{{datas[i-1].indoor.temperature}}</h5></b-col>
+                <!-- <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">อุณหภูมิ °C</b-col> -->
+                <b-col sm="3" md="3" lg="3" col class="my-2">
+                  <b-img :src="require('../assets/temperature.png')" center width="50" height="50"/>
+                </b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center"><h5>{{datas[i-1].outdoor.temperature}}</h5></b-col>
               </b-row>
-              <b-row align-h="center">
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.temperature}}</b-col>
-                <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">อุณหภูมิ °C</b-col>
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.temperature}}</b-col>
+               <b-row align-h="center" align-v="center">
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center"><h5>{{datas[i-1].indoor.humidity}}</h5></b-col>
+                <!-- <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">ความชื้น %</b-col> -->
+                <b-col sm="3" md="3" lg="3" col class="my-2">
+                  <b-img :src="require('../assets/humidity.png')" center width="50" height="50"/>
+                </b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center"><h5>{{datas[i-1].outdoor.humidity}}</h5></b-col>
               </b-row>
-              <b-row align-h="center">
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.humidity}}</b-col>
-                <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">ความชื้น %</b-col>
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.humidity}}</b-col>
+               <b-row align-h="center" align-v="center">
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center"><h5>{{datas[i-1].indoor.uv}}</h5></b-col>
+                <!-- <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">ดัชนี UV</b-col> -->
+                <b-col sm="3" md="3" lg="3" col class="my-2">
+                  <b-img :src="require('../assets/uv.png')" center width="50" height="50"/>
+                </b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center"><h5>{{datas[i-1].outdoor.uv}}</h5></b-col>
               </b-row>
-              <b-row align-h="center">
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.uv}}</b-col>
-                <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">ดัชนี UV</b-col>
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.uv}}</b-col>
-              </b-row>
-              <b-row align-h="center">
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.wind}}</b-col>
-                <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">แรงลม กม./ชม.</b-col>
-                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center">{{datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.wind}}</b-col>
+               <b-row align-h="center" align-v="center">
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center"><h5>{{datas[i-1].indoor.wind}}</h5></b-col>
+                <!-- <b-col sm="4" md="4" lg="4" col cols="5" class="text-center">แรงลม กม./ชม.</b-col> -->
+                <b-col sm="3" md="3" lg="3" col class="my-2">
+                  <b-img :src="require('../assets/wind.png')" center width="50" height="50"/>
+                </b-col>
+                <b-col sm="4" md="4" lg="4" col cols="3" class="text-center"><h5>{{datas[i-1].outdoor.wind}}</h5></b-col>
               </b-row>
             </b-card-body>
             <b-card-footer class="text-right bg-light py-0">
               <small class="text-muted font-italic font-weight-light" style="height: 20%">
-                ข้อมูลเมื่อ (ในร่ม) {{showTime(datas[datas.findIndex(x=>x.location==locations[i-1])].indoor.time)}}<br>
-                (กลางแจ้ง) {{showTime(datas[datas.findIndex(x=>x.location==locations[i-1])].outdoor.time)}}
+                ข้อมูลเมื่อ (ในร่ม) {{showTime(datas[i-1].indoor.time)}}<br>
+                (กลางแจ้ง) {{showTime(datas[i-1].outdoor.time)}}
               </small>
             </b-card-footer>
           </b-button>
@@ -142,10 +160,19 @@ export default {
         .post("http://pc.devinice.com:1111/api/getDatas")
         .then(response => {
           if (response.data.confirm) {
-            this.datas = response.data.datas;
-            this.locations = response.data.datas.map(function(obj) {
-              return obj.location;
-            });
+            var locations = [];
+            var datas = [];
+            for (var i = 0; i < response.data.datas.length; i++) {
+              locations.push(response.data.datas[i].location);
+              if (
+                response.data.datas[i].outdoor.flag === this.filter ||
+                this.filter === null
+              ) {
+                datas.push(response.data.datas[i]);
+              }
+            }
+            this.locations = locations;
+            this.datas = datas;
           } else {
             this.addName("");
             this.addEmail("");
