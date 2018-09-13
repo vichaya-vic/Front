@@ -8,13 +8,48 @@
                <!-- Right aligned nav items -->
                 <b-navbar-nav class="ml-auto">
                     <b-nav-item-dropdown :text="Name" right>
-                        <b-dropdown-item v-on:click="toPage('allshown')">หน้าแรก</b-dropdown-item>
-                        <b-dropdown-item v-on:click="toPage('graph')">กราฟ</b-dropdown-item>
+                        <b-dropdown-item v-on:click="toPage('allshown')">
+                          <b-row>
+                            <b-col cols="2">
+                              <b-img :src="require('../assets/home.png')" left width="20" height="20"/>
+                            </b-col>
+                            <b-col cols="4">หน้าแรก</b-col>
+                          </b-row>
+                        </b-dropdown-item>
+                        <b-dropdown-item v-on:click="toPage('graph')">
+                          <b-row>
+                            <b-col cols="2">
+                              <b-img :src="require('../assets/graph.png')" left width="20" height="20"/>
+                            </b-col>
+                            <b-col cols="4">กราฟ</b-col>
+                          </b-row>
+                        </b-dropdown-item>
                         <div v-if="Permission">
-                            <b-dropdown-item v-on:click="toPage('user')">ดูบัญชีผู้ใช้ทั้งหมด</b-dropdown-item>
-                            <b-dropdown-item v-on:click="toPage('adduser')">เพิ่มบัญชีผู้ใช้ใหม่</b-dropdown-item>
+                            <b-dropdown-item v-on:click="toPage('user')">
+                              <b-row>
+                                <b-col cols="2">
+                                  <b-img :src="require('../assets/users.png')" left width="20" height="20"/>
+                                </b-col>
+                                <b-col cols="4">ผู้ใช้ทั้งหมด</b-col>
+                              </b-row>
+                            </b-dropdown-item>
+                            <b-dropdown-item v-on:click="toPage('adduser')">
+                              <b-row>
+                                <b-col cols="2">
+                                  <b-img :src="require('../assets/register.png')" left width="20" height="20"/>
+                                </b-col>
+                                <b-col cols="4">เพิ่มผู้ใช้</b-col>
+                              </b-row>
+                            </b-dropdown-item>
                         </div>
-                        <b-dropdown-item v-on:click='showModal'>ออกจากระบบ</b-dropdown-item>                        
+                        <b-dropdown-item v-on:click='showModal'>
+                          <b-row>
+                            <b-col cols="2">
+                              <b-img :src="require('../assets/logout.png')" left width="20" height="20"/>
+                            </b-col>
+                            <b-col cols="4">ออกจากระบบ</b-col>
+                          </b-row>
+                        </b-dropdown-item>                        
                     </b-nav-item-dropdown>
 
                     <b-modal ref="myModalRef" hide-header>ต้องการออกจากระบบใช่หรือไม่

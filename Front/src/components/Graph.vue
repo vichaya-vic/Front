@@ -116,6 +116,9 @@
           <b-col>
             <b-button  variant="success" v-on:click="Search('Custom')">ค้นหา</b-button>
           </b-col>
+          <b-col>
+            <b-button  variant="success" v-on:click="getCSV">ดาวโหลด</b-button>
+          </b-col>
         </b-row>
       </b-tab>    
     </b-tabs>
@@ -619,6 +622,35 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
+    },
+    getCSV(){
+          let csvContent = "data:text/csv;charset=utf-8,";
+                  let tmp_csv =[]
+                  csvContent += "date,uv,wind,temperature,humid" + "\r\n";
+                  for(var i = 0;i<this.timelabel;i++)
+                  {
+                    let x = []
+                    x[0] = this.timelabel;
+                    x[1] = this.uv_l;
+                    x[2] = this.wind_l;
+                    x[3] = this.tmp_l;
+                    x[4] = this.humid_l;
+                    tmp_csv.push(x);
+                  }
+                    tmp_csv.forEach(function(rowArray) {
+                   let row = rowArray.join(",");
+                   csvContent += row + "\r\n";
+                  });
+                 var encodedUri = encodeURI(csvContent);
+          var link = document.createElement("a");
+          link.setAttribute("href", encodedUri);
+          link.setAttribute("download", "my_data.csv");
+          link.innerHTML = "Click Here to download";
+          document.body.appendChild(link); // Required for FF
+          link.click();
+      
+  
+       
     },
     addName(x) {
       store.commit("addName", x);
