@@ -626,6 +626,7 @@ export default {
     getCSV(){
           let csvContent = "data:text/csv;charset=utf-8,";
                   var tmp_csv =[]
+                  console.log("timelen = "+this.timelabel.length)
                   csvContent += "date,uv,wind,temperature,humid" + "\r\n";
                   for(var i = 0;i<this.timelabel.length;i++)
                   {
