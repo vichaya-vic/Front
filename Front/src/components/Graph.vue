@@ -630,11 +630,11 @@ export default {
                   for(var i = 0;i<this.timelabel;i++)
                   {
                     let x = []
-                    x[0] = this.timelabel;
-                    x[1] = this.uv_l;
-                    x[2] = this.wind_l;
-                    x[3] = this.tmp_l;
-                    x[4] = this.humid_l;
+                    x[0] = this.timelabel[i];
+                    x[1] = this.uv_l[i];
+                    x[2] = this.wind_l[i];
+                    x[3] = this.tmp_l[i];
+                    x[4] = this.humid_l[i];
                     tmp_csv.push(x);
                   }
                     tmp_csv.forEach(function(rowArray) {
