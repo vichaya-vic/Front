@@ -636,6 +636,7 @@ export default {
                     x[3] = this.tmp_l[i];
                     x[4] = this.humid_l[i];
                     tmp_csv.push(x);
+                     console.log("x="+x)
                   }
                   console.log(tmp_csv)
                     tmp_csv.forEach(function(rowArray) {
