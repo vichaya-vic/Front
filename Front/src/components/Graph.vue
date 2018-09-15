@@ -625,7 +625,7 @@ export default {
     },
     getCSV(){
           let csvContent = "data:text/csv;charset=utf-8,";
-                  let tmp_csv =[]
+                  var tmp_csv =[]
                   csvContent += "date,uv,wind,temperature,humid" + "\r\n";
                   for(var i = 0;i<this.timelabel;i++)
                   {
@@ -637,6 +637,7 @@ export default {
                     x[4] = this.humid_l[i];
                     tmp_csv.push(x);
                   }
+                  console.log(tmp_csv)
                     tmp_csv.forEach(function(rowArray) {
                    let row = rowArray.join(",");
                    csvContent += row + "\r\n";
