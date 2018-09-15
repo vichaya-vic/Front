@@ -627,7 +627,7 @@ export default {
           let csvContent = "data:text/csv;charset=utf-8,";
                   var tmp_csv =[]
                   csvContent += "date,uv,wind,temperature,humid" + "\r\n";
-                  for(var i = 0;i<this.timelabel;i++)
+                  for(var i = 0;i<this.timelabel.length;i++)
                   {
                     let x = []
                     x[0] = this.timelabel[i];
