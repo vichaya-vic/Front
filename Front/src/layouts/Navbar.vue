@@ -2,8 +2,12 @@
   <div class="app">
       <b-navbar toggleable="md" type="dark" variant="info">
         <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-          <b-navbar-brand v-if="!Status">NameProgram</b-navbar-brand>
-          <b-navbar-brand v-if="Status" v-on:click="toPage('')" :style="{ cursor: 'pointer'}">NameProgram</b-navbar-brand>
+          <b-navbar-brand v-if="!Status" style="max-width:100%">
+            <b-card no-body border-variant="info" bg-variant="info" class="p-1"><h5 class="font-weight-bold">Weather Station for Detecting the heat stroke</h5></b-card>
+          </b-navbar-brand>
+          <b-navbar-brand v-if="Status" v-on:click="toPage('')" :style="{ cursor: 'pointer'}" style="max-width:100%">
+            <b-card no-body border-variant="info" bg-variant="info" class="p-1"><h5 class="font-weight-bold">Weather Station for Detecting the heat stroke</h5></b-card>
+          </b-navbar-brand>
           <b-collapse v-if="Status" is-nav id="nav_collapse">                
                
           <b-navbar-nav class="ml-auto">
@@ -128,3 +132,12 @@ export default {
   }
 };
 </script>
+
+<style>
+h5 {
+  overflow: hidden;
+  white-space: nowrap;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}
+</style>
