@@ -1,32 +1,39 @@
 <template>
-    <div style="margin:5%">
-        <b-table stacked='md' bordered class="text-center" style="word-break: break-all" :items="users" :fields="fields">
-            <template slot="name" slot-scope="row">{{row.value}}</template>
-            <template slot="type" slot-scope="row">{{row.value}}</template>
-            <template slot="status" slot-scope="row">{{row.value}}</template>
-            <template slot="actions" slot-scope="row">
-                <b-button variant="danger" v-if="row.item.name!==Name&&row.item.email!==Email" v-on:click="showModal(row.item)">
-                    ลบบัญชีผู้ใช้
-                </b-button>
-            </template>
-        </b-table>
-        
-        <b-modal lazy ref="myModalRef" size="sm" class="text-center" hide-header>
-            ต้องการลบบัญชีผู้ใช้ "{{deleted.name}}" ออกจากระบบใช่หรือไม่
-            <div slot="modal-footer">
-                <b-btn size="sm" variant="secondary" v-on:click="hideModal">
-                    ยกเลิก
-                </b-btn>
-                <b-btn size="sm" variant="primary" v-on:click="delUser(deleted)">
-                    ตกลง
-                </b-btn>
+  <div class="app flex-row align-items-center mt-5">
+    <div class="container">
+      <b-card no-body>
+        <b-card-header><b-img :src="require('../assets/users.png')" left width="25" height="25"/><h5>ผู้ใช้ทั้งหมด</h5></b-card-header>
+        <b-card-body>
+          <b-table stacked="sm" striped fixed class="text-center cell" :items="users" :fields="fields">
+            <div slot="name" slot-scope="row" class="cell-overflow">{{row.value}}</div>
+            <div slot="type" slot-scope="row" class="cell-overflow">{{row.value}}</div>
+            <div slot="status" slot-scope="row" class="cell-overflow">{{row.value}}</div>
+            <div slot="actions" slot-scope="row">
+              <b-button variant="danger" :disabled="row.item.name==Name&&row.item.email==Email" v-on:click="showModal(row.item)" v-b-tooltip.hover title="ลบบัญชีผู้ใช้นี้">
+                <b-img :src="require('../assets/delete.png')" center width="15" height="15"/>
+              </b-button>
             </div>
-        </b-modal>
-
-        <b-modal lazy ref="modal1" size="sm" class="text-center" body-text-variant="success" hide-header hide-footer>
-            ลบผู้ใช้ "{{deleted.name}}" แล้ว
-        </b-modal>
+          </b-table>
+        </b-card-body>
+      </b-card>
     </div>
+        
+    <b-modal lazy ref="myModalRef" size="md" class="text-center" hide-header>
+      ต้องการลบบัญชีผู้ใช้ "{{deleted.name}}" ออกจากระบบใช่หรือไม่
+      <div slot="modal-footer">
+          <b-btn size="sm" variant="secondary" v-on:click="hideModal">
+              ยกเลิก
+          </b-btn>
+          <b-btn size="sm" variant="primary" v-on:click="delUser(deleted)">
+              ตกลง
+          </b-btn>
+      </div>
+    </b-modal>
+
+    <b-modal lazy ref="modal1" size="md" class="text-center" body-text-variant="success" hide-header hide-footer>
+      ลบผู้ใช้ "{{deleted.name}}" แล้ว
+    </b-modal>
+  </div>
 </template>
 
 <script>
@@ -34,6 +41,7 @@ import store from "../vuex/store.js";
 import Vuex from "vuex";
 import axios from "axios";
 global.vuex = Vuex;
+var url = require("../config").url;
 
 export default {
   beforeMount() {
@@ -64,7 +72,6 @@ export default {
         name: { label: "ชื่อ", sortable: true },
         email: { label: "อีเมลล์", sortable: true },
         type: { label: "ประเภท", sortable: true },
-        //status: { label: "สถานะ", sortable: true },
         actions: { label: " ", sortable: false }
       }
     };
@@ -74,7 +81,7 @@ export default {
       //get data form DB//
       axios.defaults.withCredentials = true;
       axios
-        .post("http://pc.devinice.com:1111/getUsers", {})
+        .post(url + "/getUsers", {})
         .then(response => {
           console.log(response.data);
           if (response.data.confirm) {
@@ -89,8 +96,7 @@ export default {
 
               return new_obj;
             });
-          }
-          else{
+          } else {
             this.addName("");
             this.addEmail("");
             this.addStatus(false);
@@ -106,7 +112,7 @@ export default {
       console.log("del");
       axios.defaults.withCredentials = true;
       axios
-        .post("http://pc.devinice.com:1111/delUser", {
+        .post(url + "/delUser", {
           name: this.deleted.name,
           email: this.deleted.email,
           isAdmin: this.deleted.isAdmin
@@ -152,4 +158,20 @@ export default {
   }
 };
 </script>
+
+<style>
+@media all and (max-width: 700px) {
+  .cell {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+.cell-overflow {
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>
 

@@ -1,34 +1,52 @@
-<template>   
-    <div class="justify-content-md-center" style="margin:5% 20% 5% 20%">
-      <b-form @submit="onSubmit">
-        <b-card title="กรุณาลงชื่อเข้าใช้" class="text-center">
-          <hr class="my-4">
-          <b-alert variant="danger" dismissible :show="showAlert" @dismissed="showAlert=false">
-            อีเมลล์หรือรหัสผ่านไม่ถูกต้อง
-          </b-alert>    
-          <b-row align-v="center" class="p-2">
-            <b-col sm="3">อีเมลล์ : </b-col >
-            <b-col>           
-              <b-input v-model="form.email" required size="md" type="email" placeholder="xxxxx@example.com"></b-input>
-            </b-col >
-          </b-row>
-
-          <b-row align-v="center" class="p-2">
-            <b-col sm="3">รหัสผ่าน : </b-col >
-            <b-col>           
-              <b-input v-model="form.password" required size="md" type="password" placeholder="**********"></b-input>
-            </b-col >
-          </b-row>
-          <b-button type="submit" variant="primary">ลงชื่อเข้าใช้</b-button>
-        </b-card>
-      </b-form>   
+<template> 
+  <div class="app flex-row align-items-center mt-5">
+    <div class="container">
+      <b-row class="justify-content-center">
+        <b-col md="6">
+          <b-card-group>
+            <b-card no-body class="p-4">
+              <b-card-body>
+                <b-form @submit="onSubmit" class="text-center">
+                  <h3>กรุณาลงชื่อเข้าสู่ระบบ</h3>
+                  <hr class="my-4">
+                  <b-alert variant="danger" dismissible :show="showAlert" @dismissed="showAlert=false">อีเมลล์หรือรหัสผ่านไม่ถูกต้อง</b-alert>
+                  
+                  <b-input-group class="mb-3">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <b-img :src="require('../assets/email.png')" left width="20" height="20"/>
+                      </div>
+                    </div>
+                    
+                    <b-form-input type="email" class="form-control" placeholder="อีเมลล์" v-model="form.email" required/>
+                  </b-input-group>
+                  
+                  <b-input-group class="mb-3">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <b-img :src="require('../assets/password.png')" left width="20" height="20"/>
+                      </div>
+                    </div>
+                    
+                    <b-form-input type="password" class="form-control" placeholder="รหัสผ่าน" v-model="form.password" required/>
+                  </b-input-group>
+                  
+                  <b-button type="submit" variant="primary">ลงชื่อเข้าใช้</b-button>
+                </b-form>
+              </b-card-body>
+            </b-card>
+          </b-card-group>
+        </b-col>
+      </b-row>
     </div>
+  </div>  
 </template>
 <script>
 import store from "../vuex/store.js";
 import Vuex from "vuex";
 import axios from "axios";
 global.vuex = Vuex;
+var url = require("../config").url
 
 export default {
   store,
@@ -58,7 +76,7 @@ export default {
       axios.defaults.withCredentials = true; //set cookie for back end
 
       axios
-        .post("http://pc.devinice.com:1111/setLogin", {
+        .post(url+"/setLogin", {
           email: this.form.email,
           PASS: this.form.password
         })

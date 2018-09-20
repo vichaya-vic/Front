@@ -1,75 +1,80 @@
 <template>
-  <div class="justify-content-md-center" style="margin:5% 20% 5% 20%">
-    <b-form @submit="onSubmit">
-      <b-card title="เพิ่มบัญชีผู้ใช้" class="text-center">
-        <hr class="my-4">
+  <div class="app flex-row align-items-center mt-5">
+    <div class="container">
+      <b-row class="justify-content-center">
+        <b-col md="8">
+          <b-card-group>
+            <b-card no-body class="p-4">
+              <b-card-body>
+                <b-form @submit="onSubmit" class="text-center">
+                  <h3>เพิ่มบัญชีผู้ใช้</h3>
+                  <hr class="my-4">
 
-        <b-alert variant="danger" dismissible :show="showAlert" @dismissed="showAlert=false">
-          {{textAlert}}
-        </b-alert>
+                  <b-alert variant="danger" dismissible :show="showAlert" @dismissed="showAlert=false">
+                    {{textAlert}}
+                  </b-alert>
 
-        <b-alert variant="success" dismissible :show="showSuccess" @dismissed="showSuccess=false">
-          เพิ่มบัญชีผู้ใช้ในระบบแล้ว
-        </b-alert>
+                  <b-alert variant="success" dismissible :show="showSuccess" @dismissed="showSuccess=false">
+                    เพิ่มบัญชีผู้ใช้ในระบบแล้ว
+                  </b-alert>
 
-        <b-row align-v="center" class="p-2">
-          <b-col sm="3">ชื่อ : </b-col >
-          <b-col>           
-            <b-input v-model="form.name" size="md" required type="text"></b-input>
-          </b-col >
-        </b-row>
+                  <b-input-group class="mb-3">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <b-img :src="require('../assets/user1.png')" left width="20" height="20"/>
+                      </div>
+                    </div>
+                    
+                    <b-form-input type="text" class="form-control" placeholder="ชื่อผู้ใช้" v-model="form.name" required/>
+                  </b-input-group>
+                  
+                  <b-input-group class="mb-3">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <b-img :src="require('../assets/email.png')" left width="20" height="20"/>
+                      </div>
+                    </div>
+                    
+                    <b-form-input type="email" class="form-control" placeholder="อีเมลล์" v-model="form.email" required/>
+                  </b-input-group>
+                  
+                  <b-input-group>
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <b-img :src="require('../assets/password.png')" left width="20" height="20"/>
+                      </div>
+                    </div>
+                    
+                    <b-form-input type="password" class="form-control" placeholder="รหัสผ่าน" v-model="form.CONPASS" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,12}"/>
+                  </b-input-group>
 
-        <b-row align-v="center" class="p-2">
-          <b-col sm="3">อีเมลล์ : </b-col >
-          <b-col>           
-            <b-input v-model="form.email" required size="md" type="email"></b-input>
-          </b-col >
-        </b-row>
+                  <b-form-text class="mb-2">
+                    รหัสผ่านต้องมีขนาด 6-12 ตัวอักษร และต้องมีตัวเลข, ตัวพิมพ์ใหญ่และตัวพิมพ์เล็กอย่างน้อยอย่างละ 1ตัว
+                  </b-form-text>
 
-        <b-row align-v="center" class="p-2">
-          <b-col sm="3">รหัสผ่าน : </b-col >
-          <b-col>     
-            <b-input v-model="form.PASS" size="md" required type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,12}"></b-input>
-          </b-col >
-        </b-row>
+                  <b-input-group>
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <b-img :src="require('../assets/password.png')" left width="20" height="20"/>
+                      </div>
+                    </div>
+                    
+                    <b-form-input type="password" class="form-control" placeholder="ยืนยันรหัสผ่าน" v-model="form.PASS" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,12}"/>
+                  </b-input-group>
+                  
+                  <b-form-text class="mb-3">
+                    รหัสผ่านต้องมีขนาด 6-12 ตัวอักษร และต้องมีตัวเลข, ตัวพิมพ์ใหญ่และตัวพิมพ์เล็กอย่างน้อยอย่างละ 1ตัว
+                  </b-form-text>
 
-        <b-row>
-          <b-col sm="3"></b-col>
-          <b-col>
-            <b-form-text>
-              รหัสผ่านต้องมีขนาด 6-12 ตัวอักษร และต้องมีตัวเลข, ตัวพิมพ์ใหญ่และตัวพิมพ์เล็กอย่างน้อยอย่างละ 1ตัว
-            </b-form-text>
-          </b-col>
-        </b-row>
-        
-        <b-row align-v="center" class="p-2">          
-          <b-col sm="3">ยืนยันรหัสผ่าน : </b-col>
-          <b-col>           
-            <b-input v-model="form.CONPASS" size="md" required type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,12}"></b-input>
-          </b-col >          
-        </b-row>
-
-        <b-row>
-          <b-col sm="3"></b-col>
-          <b-col>
-            <b-form-text>
-              รหัสผ่านต้องมีขนาด 6-12 ตัวอักษร และต้องมีตัวเลข, ตัวพิมพ์ใหญ่และตัวพิมพ์เล็กอย่างน้อยอย่างละ 1ตัว
-            </b-form-text>
-          </b-col>
-        </b-row>
-
-        <b-row align-h="center" class="pt-3">
-          <b-form-group required > 
-            <input type="radio" :value="false" v-model="form.isAdmin">
-              <label class="p-2">ยูสเซอร์</label>
-            <input type="radio" :value ="true" v-model="form.isAdmin">
-              <label class="p-2">แอดมิน</label>
-          </b-form-group>
-        </b-row>
-        
-        <b-button type="submit" variant="primary">เพิ่มบัญชีผู้ใช้</b-button> 
-      </b-card>
-    </b-form>
+                  <b-form-radio-group plain :options="[{text:'ยูสเซอร์',value:false},{text:'แอดมิน',value:true}]" v-model="form.isAdmin" class="mb-4"/>                   
+                  <b-button type="submit" variant="success" style="width:100%">เพิ่มบัญชีผู้ใช้</b-button>
+                </b-form>
+              </b-card-body>
+            </b-card>
+          </b-card-group>
+        </b-col>
+      </b-row>
+    </div>
   </div>
 </template>
  
@@ -78,6 +83,7 @@ import store from "../vuex/store.js";
 import Vuex from "vuex";
 import axios from "axios";
 global.vuex = Vuex;
+var url = require("../config").url;
 
 export default {
   beforeMount() {
@@ -115,7 +121,7 @@ export default {
       if (this.func_check()) {
         axios.defaults.withCredentials = true;
         axios
-          .post("http://pc.devinice.com:1111/newUser", {
+          .post(url + "/newUser", {
             name: this.form.name,
             email: this.form.email,
             PASS: this.form.PASS,

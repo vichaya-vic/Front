@@ -11,7 +11,8 @@ import "flatpickr/dist/themes/material_blue.css";
 
 Vue.use(BootstrapVue)
 new Vue({
+  el:'#app',
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+});
