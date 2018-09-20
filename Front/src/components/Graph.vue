@@ -1,15 +1,18 @@
 <template>
   <div class="app flex-row align-items-center mt-5">
     <div class="container">
-      <b-form-group class="justify-content-md-center" style="margin-left:15%;margin-right:15%">
-        <b-input-group>
-          <b-form-select :options="locations" v-model="my_filter.location">
-            <template slot="first">
-              <option :value="null" disabled>-- กรุณาเลือกสถานที่ --</option>
-            </template>
-          </b-form-select>
-        </b-input-group>
-      </b-form-group> 
+      <b-row>
+        <b-col cols="1" class="pl-5"><b-img v-if="my_filter.location!=null" :src="require('../assets/flag-'+datas[datas.findIndex(x => x.location == my_filter.location)].outdoor.flag+'.png')" left width="40" height="40"/></b-col>
+        <b-col cols="10">
+          <b-form-group class="justify-content-md-center">
+            <b-input-group>
+              <b-form-select :options="locations" v-model="my_filter.location">
+                <template slot="first"><option :value="null" disabled>-- กรุณาเลือกสถานที่ --</option></template>
+              </b-form-select>
+            </b-input-group>
+          </b-form-group>
+        </b-col>
+      </b-row> 
     
       <b-tabs>
         <b-tab title="แสดงข้อมูลรายวัน" active v-on:click="clearData" >
@@ -131,7 +134,7 @@
       </b-card-group>
     </b-container>
 
-    <b-alert variant="danger" dismissible :show="showAlert" @dismissed="showAlert=false">
+    <b-alert variant="danger" class="mt-4" dismissible :show="showAlert" @dismissed="showAlert=false">
       ไม่พบข้อมูลนี้ในระบบ
     </b-alert>
   </div> 
@@ -145,7 +148,7 @@ import flatPickr from "vue-flatpickr-component";
 import "vue-range-slider/dist/vue-range-slider.css";
 import axios from "axios";
 
-var url = require("../config").url
+var url = require("../config").url;
 var call = false;
 
 export default {
@@ -159,6 +162,7 @@ export default {
   data() {
     return {
       locations: [],
+      datas: [],
       show: false,
       showAlert: false,
       my_filter: {
@@ -431,16 +435,26 @@ export default {
     getLocations() {
       axios.defaults.withCredentials = true;
       axios
-        .post(url+"/api/getDatas")
+        .post(url + "/api/getDatas")
         .then(response => {
           if (response.data.confirm) {
-            this.locations = response.data.datas.map(function(obj) {
-              return obj.location;
-            });
+            var locations = [];
+            var datas = [];
+            for (var i = 0; i < response.data.datas.length; i++) {
+              locations.push(response.data.datas[i].location);
+              datas.push(response.data.datas[i]);
+            }
+            this.locations = locations;
+            this.datas = datas;
             if (this.$route.params.key === undefined) {
               this.my_filter.location = null;
             } else {
-              this.my_filter.location = response.data.datas[response.data.datas.findIndex(x => x.key == this.$route.params.key)].location;
+              this.my_filter.location =
+                response.data.datas[
+                  response.data.datas.findIndex(
+                    x => x.key == this.$route.params.key
+                  )
+                ].location;
               this.show = true;
               this.getDay();
             }
@@ -461,7 +475,7 @@ export default {
       console.log(this.my_filter.typedate);
       axios.defaults.withCredentials = true;
       axios
-        .post(url+"/api/getDay", {
+        .post(url + "/api/getDay", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
           typedate: this.my_filter.typedate
@@ -492,7 +506,7 @@ export default {
               this.addPermission(false);
               this.$router.push("/");
             } else if (response.data.err === "no data") {
-              this.show = false
+              this.show = false;
               this.showAlert = true;
             }
           }
@@ -504,7 +518,7 @@ export default {
     getMonth() {
       this.C = false;
       axios
-        .post(url+"/api/getMonth", {
+        .post(url + "/api/getMonth", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
           month: this.my_filter.month
@@ -531,7 +545,7 @@ export default {
               this.addPermission(false);
               this.$router.push("/");
             } else if (response.data.err === "no data") {
-              this.show = false
+              this.show = false;
               this.showAlert = true;
             }
           }
@@ -543,7 +557,7 @@ export default {
     getYear() {
       this.C = false;
       axios
-        .post(url+"/api/getYear", {
+        .post(url + "/api/getYear", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
           year: this.my_filter.year
@@ -569,7 +583,7 @@ export default {
               this.addPermission(false);
               this.$router.push("/");
             } else if (response.data.err === "no data") {
-              this.show = false
+              this.show = false;
               this.showAlert = true;
             }
           }
@@ -581,7 +595,7 @@ export default {
     getCustom() {
       this.C = false;
       axios
-        .post(url+"/api/getCustom", {
+        .post(url + "/api/getCustom", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
           typedate: this.my_filter.Range_Date,
@@ -609,7 +623,7 @@ export default {
               this.addPermission(false);
               this.$router.push("/");
             } else if (response.data.err === "no data") {
-              this.show = false
+              this.show = false;
               this.showAlert = true;
             }
           }
@@ -618,33 +632,32 @@ export default {
           console.log(error);
         });
     },
-    getCSV(){
-          let csvContent = "data:text/csv;charset=utf-8,";
-                  var tmp_csv =[]
-                  console.log("timelen = "+this.timelabel.length)
-                  csvContent += "date,uv,wind,temperature,humid" + "\r\n";
-                  for(var i = 0;i<this.timelabel.length;i++)
-                  {
-                    let x = []
-                    x[0] = this.timelabel[i];
-                    x[1] = this.uv_l[i];
-                    x[2] = this.wind_l[i];
-                    x[3] = this.tmp_l[i];
-                    x[4] = this.humid_l[i];
-                    tmp_csv.push(x);
-                     console.log("x="+x)
-                  }
-                  console.log(tmp_csv)
-                    tmp_csv.forEach(function(rowArray) {
-                   let row = rowArray.join(",");
-                   csvContent += row + "\r\n";
-                  });
-                 var encodedUri = encodeURI(csvContent);
-          var link = document.createElement("a");
-          link.setAttribute("href", encodedUri);
-          link.setAttribute("download", "my_data.csv");
-          document.body.appendChild(link); // Required for FF
-          link.click();    
+    getCSV() {
+      let csvContent = "data:text/csv;charset=utf-8,";
+      var tmp_csv = [];
+      console.log("timelen = " + this.timelabel.length);
+      csvContent += "date,uv,wind,temperature,humid" + "\r\n";
+      for (var i = 0; i < this.timelabel.length; i++) {
+        let x = [];
+        x[0] = this.timelabel[i];
+        x[1] = this.uv_l[i];
+        x[2] = this.wind_l[i];
+        x[3] = this.tmp_l[i];
+        x[4] = this.humid_l[i];
+        tmp_csv.push(x);
+        console.log("x=" + x);
+      }
+      console.log(tmp_csv);
+      tmp_csv.forEach(function(rowArray) {
+        let row = rowArray.join(",");
+        csvContent += row + "\r\n";
+      });
+      var encodedUri = encodeURI(csvContent);
+      var link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "my_data.csv");
+      document.body.appendChild(link); // Required for FF
+      link.click();
     },
     addName(x) {
       store.commit("addName", x);

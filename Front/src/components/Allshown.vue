@@ -145,7 +145,7 @@
       <b-modal lazy ref="modal2" size="sm" class="text-center" body-text-variant="success" hide-header hide-footer>เพิ่ม "{{location}}" เรียบร้อย</b-modal>
       <b-modal lazy ref="modal3" size="sm" class="text-center" body-text-variant="danger" hide-header hide-footer>มี "{{location}}" ในระบบแล้ว</b-modal>
 
-      <b-modal lazy ref="modal4" size="md" class="text-center">
+      <b-modal lazy ref="modal4" size="md" class="text-center" hide-header>
         ต้องการลบ "{{location}}" ใช่หรือไม่
         <div slot="modal-footer">
           <b-button size="sm" variant="secondary" v-on:click="hideModal('modal4')">ยกเลิก</b-button>
