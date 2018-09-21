@@ -213,8 +213,8 @@ export default {
           yAxes: [
             {
               ticks: {
-                min: 0,
-                max: 100,
+                // min: 0,
+                // max: 100,
                 fontSize: 15
               }
             }
