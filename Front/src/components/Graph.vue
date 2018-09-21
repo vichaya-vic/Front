@@ -1,124 +1,85 @@
 <template>
-  <div style="margin:5%">
-    <b-form-group class="justify-content-md-center" style="margin-left:15%;margin-right:15%">
-      <b-input-group>
-          <b-form-select :options="locations" v-model="my_filter.location">
-            <template slot="first">
-                <option :value="null" disabled>-- กรุณาเลือกสถานที่ --</option>
-            </template>
-          </b-form-select>
-      </b-input-group>
-    </b-form-group> 
-    
-    <b-tabs>
-      <b-tab title="แสดงข้อมูลรายวัน" active v-on:click="clearData" >
-        <b-row align-h="center" class="pt-3">
-          <b-col sm="2" class="pt-1">เลือกวันที่ :</b-col >
-
-          <b-col class="pt-1">
-            <flat-pickr class="form-control" :config="config"  v-model="my_filter.typedate" ></flat-pickr>  
-          </b-col>
-
-          <b-col>
-            <b-form-group>
-              <b-form-radio-group buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/>
-            </b-form-group>
-          </b-col>
-
-          <b-col>
-            <b-button  variant="success" v-on:click="Search('Day')">ค้นหา</b-button>
-          </b-col>
-
-          <b-col v-if="show">
-            <range-slider class="slider pt-3 pl-3" :min=0 :max="timelabel.length-13" step="1" :disabled="false" v-on:input="OnSL" v-model="sliderValue" > </range-slider>
-          </b-col>
-        </b-row>
-      </b-tab>
-
-      <b-tab title="แสดงข้อมูลรายเดือน" v-on:click="clearData">
-        <b-row align-h="center" class="pt-3">
-          <b-col sm="2" class="pt-1">เลือกเดือน :</b-col >
-            
-          <b-col class="pt-1">
+  <div class="app flex-row align-items-center mt-5">
+    <div class="container">
+      <b-row>
+        <b-col cols="1" class="pl-5"><b-img v-if="my_filter.location!=null" :src="require('../assets/flag-'+datas[datas.findIndex(x => x.location == my_filter.location)].outdoor.flag+'.png')" left width="40" height="40"/></b-col>
+        <b-col cols="10">
+          <b-form-group class="justify-content-md-center">
             <b-input-group>
-              <b-form-select :options="db_month" v-model="my_filter.month">
-                <template slot="first">
-                  <option :value="null" disabled>-- กรุณาเลือกเดือน --</option>
-                </template>
+              <b-form-select :options="locations" v-model="my_filter.location">
+                <template slot="first"><option :value="null" disabled>-- กรุณาเลือกสถานที่ --</option></template>
               </b-form-select>
             </b-input-group>
-          </b-col>
+          </b-form-group>
+        </b-col>
+      </b-row> 
+    
+      <b-tabs>
+        <b-tab title="แสดงข้อมูลรายวัน" active v-on:click="clearData" >
+          <b-row class="justify-content-center text-center" align-h="center" align-v="center">
+            <b-col>
+              <b-input-group class="mt-4">
+                <div class="input-group-prepend"><div class="input-group-text"><b-img :src="require('../assets/calendar.png')" left width="20" height="20"/></div></div>
+                <flat-pickr class="form-control" :config="config"  v-model="my_filter.typedate" ></flat-pickr>
+              </b-input-group>
+            </b-col>
 
-          <b-col>
-            <b-form-group>
-              <b-form-radio-group buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/>
-            </b-form-group>
-          </b-col>
+            <b-col><b-form-radio-group class="mt-4" buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/></b-col>
+            <b-col><b-button class="mt-4" variant="info" v-on:click="Search('Day')">ค้นหา</b-button></b-col>
+          </b-row>
 
-          <b-col>
-            <b-button  variant="success" v-on:click="Search('Month')">ค้นหา</b-button>
-          </b-col>
-        </b-row>
-      </b-tab>
+          <b-row v-if="show&&!showAlert" align-h="center" align-v="center"><range-slider class="slider mt-4" :min=0 :max="timelabel.length-13" step="1" :disabled="false" v-on:input="OnSL" v-model="sliderValue" > </range-slider></b-row>
+        </b-tab>
+
+        <b-tab title="แสดงข้อมูลรายเดือน" v-on:click="clearData">
+          <b-row class="justify-content-center text-center" align-h="center" align-v="center"> 
+            <b-col>
+              <b-input-group class="mt-4">
+                <div class="input-group-prepend"><div class="input-group-text"><b-img :src="require('../assets/calendar.png')" left width="20" height="20"/></div></div>
+                <b-form-select :options="db_month" v-model="my_filter.month">
+                  <template slot="first">
+                    <option :value="null" disabled>-- กรุณาเลือกเดือน --</option>
+                  </template>
+                </b-form-select>
+              </b-input-group>
+            </b-col>
+            <b-col><b-form-radio-group class="mt-4" buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/></b-col>
+            <b-col><b-button class="mt-4" variant="info" v-on:click="Search('Month')">ค้นหา</b-button></b-col>
+          </b-row>
+        </b-tab>
        
-      <b-tab title="แสดงข้อมูลรายปี" v-on:click="clearData">
-        <b-row align-h="center" class="pt-3">
-          <b-col sm="2" class="pt-1">เลือกปี :</b-col >
-            
-          <b-col class="pt-1">
-            <b-form-input 
-              type="text"
-              v-model="my_filter.year"
-              placeholder="กรุณาระบุปี ค.ศ.">
-            </b-form-input> 
-          </b-col>
-
-          <b-col>
-            <b-form-group>
-              <b-form-radio-group buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/>
-            </b-form-group>
-          </b-col>
-
-          <b-col>
-            <b-button  variant="success" v-on:click="Search('Year')">ค้นหา</b-button>
-          </b-col>
+        <b-tab title="แสดงข้อมูลรายปี" v-on:click="clearData">
+          <b-row class="justify-content-center text-center" align-h="center" align-v="center">
+            <b-col>
+              <b-input-group class="mt-4">
+                <div class="input-group-prepend"><div class="input-group-text"><b-img :src="require('../assets/calendar.png')" left width="20" height="20"/></div></div>
+                <b-form-input type="text" v-model="my_filter.year" placeholder="กรุณาระบุปี ค.ศ."></b-form-input> 
+              </b-input-group>
+            </b-col>
+            <b-col><b-form-radio-group class="mt-4" buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/></b-col>
+            <b-col><b-button class="mt-4" variant="info" v-on:click="Search('Year')">ค้นหา</b-button></b-col>
         </b-row>
       </b-tab>
 
       <b-tab title="แสดงข้อมูลแบบกำหนดเอง" v-on:click="clearData" >
-        <b-row align-h="center" class="pt-3">
-          <b-col sm="2" class="pt-1">เลือกวันที่ :</b-col >
-
-          <b-col class="pt-1">
-            <flat-pickr class="form-control" :config="Range_T"  v-model="my_filter.Range_Date" placeholder="กรุณาระบุช่วงวัน" ></flat-pickr> 
-          </b-col>
-
-          <b-col sm="2" class="pt-1">เลือกช่วงเวลา :</b-col >
-
-          <b-col class="pt-1">
-            <flat-pickr  :config="timeOptions"  v-model="my_filter.Ftime" ></flat-pickr>           
-          </b-col>
-          
-          <b-col sm="2" class="pt-1">ถึง</b-col >
-
-          <b-col class="pt-1">
-            <flat-pickr  :config="timeOptions"  v-model="my_filter.Ttime" ></flat-pickr>           
-          </b-col>
-        </b-row>
-
-        <b-row>
-          <b-col>
-            <b-form-group>
-              <b-form-radio-group buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/>
-            </b-form-group>
-          </b-col>
-
-          <b-col>
-            <b-button  variant="success" v-on:click="Search('Custom')">ค้นหา</b-button>
-          </b-col>
-          <b-col>
-            <b-button  variant="success" v-on:click="getCSV">ดาวโหลด</b-button>
-          </b-col>
+        <b-row class="justify-content-center text-center" align-h="center" align-v="center">
+            <b-col>
+              <b-input-group class="mt-4">
+                <div class="input-group-prepend"><div class="input-group-text"><b-img :src="require('../assets/calendar.png')" left width="20" height="20"/></div></div>
+                <flat-pickr class="form-control" :config="Range_T"  v-model="my_filter.Range_Date" placeholder="กรุณาระบุช่วงวัน" ></flat-pickr>
+              </b-input-group>
+            </b-col>
+            <b-col>
+              <b-input-group class="mt-4">
+                <div class="input-group-prepend"><div class="input-group-text"><b-img :src="require('../assets/time.png')" left width="20" height="20"/></div></div>
+                <flat-pickr class="form-control" :config="timeOptions"  v-model="my_filter.Ftime" placeholder="เวลาเริ่มต้น"></flat-pickr>
+                <div class="input-group-prepend"><div class="input-group-text"><b-img :src="require('../assets/to.png')" left width="20" height="20"/></div></div>
+                <flat-pickr class="form-control" :config="timeOptions"  v-model="my_filter.Ttime" placeholder="เวลาสิ้นสุด"></flat-pickr>
+              </b-input-group>
+            </b-col>
+            <b-col cols="2"><b-form-radio-group class="mt-4" buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/></b-col>
+            <b-col cols="1"><b-button class="mt-4 ml-3" variant="info" v-on:click="Search('Custom')">ค้นหา</b-button></b-col>
+            <b-col cols="1"><b-button class="mt-4 p-2" variant="success" v-on:click="getCSV"><b-img :src="require('../assets/download.png')" left width="20" height="20"/></b-button></b-col>
         </b-row>
       </b-tab>    
     </b-tabs>
@@ -130,22 +91,54 @@
               <b-form-radio-group buttons v-model="type_chart" :options="[{text:'กราฟเส้น',value:'line'},{text:'กราฟแท่ง',value:'bar'}]" button-variant="outline-secondary" class="pt-3" v-on:input="add_all"/>
             </b-form-group>
           </b-col>
-        </b-row>
-      <b-row>
-        <b-col><LC class="LineC" :chartData="this.dataa_uv" :options="this.option" /></b-col>
-        <b-col><LC :chartData="this.dataa_tmp" :options="this.option" /> </b-col>
       </b-row>
 
-      <b-row>
-        <b-col><LC :chartData="this.dataa_wind" :options="this.option" /> </b-col>
-        <b-col><LC :chartData="this.dataa_humid" :options="this.option" /> </b-col>
-      </b-row>
+      <b-card-group>
+        <b-row class="justify-content-center text-center">
+          <b-col lg="6" class="mb-4">
+            <b-card no-body>
+              <b-card-header><h5 class="font-weight-bold">รังสี UV</h5></b-card-header>
+              <b-card-body>
+                <LC class="LineC" :chartData="this.dataa_uv" :options="this.option" />
+              </b-card-body>
+            </b-card>
+          </b-col>
+
+          <b-col lg="6" class="mb-4">
+            <b-card no-body>
+              <b-card-header><h5 class="font-weight-bold">อุณหภูมิ</h5></b-card-header>
+              <b-card-body>
+                <LC :chartData="this.dataa_tmp" :options="this.option" />
+              </b-card-body>
+            </b-card>
+            </b-col>
+
+          <b-col lg="6" class="mb-4">
+            <b-card no-body>
+              <b-card-header><h5 class="font-weight-bold">แรงลม</h5></b-card-header>
+              <b-card-body>
+                <LC :chartData="this.dataa_wind" :options="this.option" />
+              </b-card-body>
+            </b-card>
+          </b-col>
+
+          <b-col lg="6" class="mb-4">
+            <b-card no-body>
+              <b-card-header><h5 class="font-weight-bold">ความชื้น</h5></b-card-header>
+              <b-card-body>
+                <LC :chartData="this.dataa_humid" :options="this.option" />
+              </b-card-body>
+            </b-card>
+          </b-col>
+        </b-row>
+      </b-card-group>
     </b-container>
 
-    <b-alert variant="danger" dismissible :show="showAlert" @dismissed="showAlert=false">
+    <b-alert variant="danger" class="mt-4" dismissible :show="showAlert" @dismissed="showAlert=false">
       ไม่พบข้อมูลนี้ในระบบ
     </b-alert>
-  </div>  
+  </div> 
+  </div> 
 </template>
 
 <script>
@@ -155,7 +148,9 @@ import flatPickr from "vue-flatpickr-component";
 import "vue-range-slider/dist/vue-range-slider.css";
 import axios from "axios";
 
+var url = require("../config").url;
 var call = false;
+
 export default {
   components: { LC, RangeSlider, flatPickr },
   beforeMount() {
@@ -167,6 +162,7 @@ export default {
   data() {
     return {
       locations: [],
+      datas: [],
       show: false,
       showAlert: false,
       my_filter: {
@@ -217,8 +213,8 @@ export default {
           yAxes: [
             {
               ticks: {
-                min: 0,
-                max: 100,
+                // min: 0,
+                // max: 100,
                 fontSize: 15
               }
             }
@@ -277,7 +273,6 @@ export default {
         else if (m === "Month") this.getMonth();
         else if (m === "Year") this.getYear();
         else if (m === "Custom") this.getCustom();
-        this.show = true;
       }
     },
     OnSL() {
@@ -440,16 +435,26 @@ export default {
     getLocations() {
       axios.defaults.withCredentials = true;
       axios
-        .post("http://pc.devinice.com:1111/api/getLocations")
+        .post(url + "/api/getDatas")
         .then(response => {
           if (response.data.confirm) {
-            this.locations = response.data.datas.map(function(obj) {
-              return obj.location;
-            });
+            var locations = [];
+            var datas = [];
+            for (var i = 0; i < response.data.datas.length; i++) {
+              locations.push(response.data.datas[i].location);
+              datas.push(response.data.datas[i]);
+            }
+            this.locations = locations;
+            this.datas = datas;
             if (this.$route.params.key === undefined) {
               this.my_filter.location = null;
             } else {
-              this.my_filter.location = response.data.datas[response.data.datas.findIndex(x => x.key == this.$route.params.key)].location;
+              this.my_filter.location =
+                response.data.datas[
+                  response.data.datas.findIndex(
+                    x => x.key == this.$route.params.key
+                  )
+                ].location;
               this.show = true;
               this.getDay();
             }
@@ -470,7 +475,7 @@ export default {
       console.log(this.my_filter.typedate);
       axios.defaults.withCredentials = true;
       axios
-        .post("http://pc.devinice.com:1111/api/getDay", {
+        .post(url + "/api/getDay", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
           typedate: this.my_filter.typedate
@@ -501,6 +506,7 @@ export default {
               this.addPermission(false);
               this.$router.push("/");
             } else if (response.data.err === "no data") {
+              this.show = false;
               this.showAlert = true;
             }
           }
@@ -512,7 +518,7 @@ export default {
     getMonth() {
       this.C = false;
       axios
-        .post("http://pc.devinice.com:1111/api/getMonth", {
+        .post(url + "/api/getMonth", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
           month: this.my_filter.month
@@ -539,6 +545,7 @@ export default {
               this.addPermission(false);
               this.$router.push("/");
             } else if (response.data.err === "no data") {
+              this.show = false;
               this.showAlert = true;
             }
           }
@@ -550,7 +557,7 @@ export default {
     getYear() {
       this.C = false;
       axios
-        .post("http://pc.devinice.com:1111/api/getYear", {
+        .post(url + "/api/getYear", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
           year: this.my_filter.year
@@ -576,6 +583,7 @@ export default {
               this.addPermission(false);
               this.$router.push("/");
             } else if (response.data.err === "no data") {
+              this.show = false;
               this.showAlert = true;
             }
           }
@@ -587,7 +595,7 @@ export default {
     getCustom() {
       this.C = false;
       axios
-        .post("http://pc.devinice.com:1111/api/getCustom", {
+        .post(url + "/api/getCustom", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
           typedate: this.my_filter.Range_Date,
@@ -615,6 +623,7 @@ export default {
               this.addPermission(false);
               this.$router.push("/");
             } else if (response.data.err === "no data") {
+              this.show = false;
               this.showAlert = true;
             }
           }
@@ -623,37 +632,32 @@ export default {
           console.log(error);
         });
     },
-    getCSV(){
-          let csvContent = "data:text/csv;charset=utf-8,";
-                  var tmp_csv =[]
-                  console.log("timelen = "+this.timelabel.length)
-                  csvContent += "date,uv,wind,temperature,humid" + "\r\n";
-                  for(var i = 0;i<this.timelabel.length;i++)
-                  {
-                    let x = []
-                    x[0] = this.timelabel[i];
-                    x[1] = this.uv_l[i];
-                    x[2] = this.wind_l[i];
-                    x[3] = this.tmp_l[i];
-                    x[4] = this.humid_l[i];
-                    tmp_csv.push(x);
-                     console.log("x="+x)
-                  }
-                  console.log(tmp_csv)
-                    tmp_csv.forEach(function(rowArray) {
-                   let row = rowArray.join(",");
-                   csvContent += row + "\r\n";
-                  });
-                 var encodedUri = encodeURI(csvContent);
-          var link = document.createElement("a");
-          link.setAttribute("href", encodedUri);
-          link.setAttribute("download", "my_data.csv");
-          link.innerHTML = "Click Here to download";
-          document.body.appendChild(link); // Required for FF
-          link.click();
-      
-  
-       
+    getCSV() {
+      let csvContent = "data:text/csv;charset=utf-8,";
+      var tmp_csv = [];
+      console.log("timelen = " + this.timelabel.length);
+      csvContent += "date,uv,wind,temperature,humid" + "\r\n";
+      for (var i = 0; i < this.timelabel.length; i++) {
+        let x = [];
+        x[0] = this.timelabel[i];
+        x[1] = this.uv_l[i];
+        x[2] = this.wind_l[i];
+        x[3] = this.tmp_l[i];
+        x[4] = this.humid_l[i];
+        tmp_csv.push(x);
+        console.log("x=" + x);
+      }
+      console.log(tmp_csv);
+      tmp_csv.forEach(function(rowArray) {
+        let row = rowArray.join(",");
+        csvContent += row + "\r\n";
+      });
+      var encodedUri = encodeURI(csvContent);
+      var link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "my_data.csv");
+      document.body.appendChild(link); // Required for FF
+      link.click();
     },
     addName(x) {
       store.commit("addName", x);
