@@ -601,8 +601,8 @@ export default {
         .post(url + "/api/getMYear", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
-          Tyear: this.my_filter.year,
-          Fyear: this.my_filter.year-1
+          Tyear:"2018",
+          Fyear:"2016"
         })
         .then(response => {
          
