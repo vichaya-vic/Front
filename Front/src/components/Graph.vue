@@ -607,8 +607,8 @@ export default {
         .then(response => {
          
           console.log(response.data.length) 
-          console.log(new Date(response.data[0].date).toLocaleString())
-            console.log(new Date(response.data[response.data.length-1].date).toLocaleString())
+          console.log(new Date(response.data))
+         
           console.log("Finish Myyear")
         })
         .catch(function(error) {
