@@ -596,11 +596,11 @@ export default {
     getMYear(){
        this.C = false;
       axios
-        .post(url + "/api/getYear", {
+        .post(url + "/api/getMYear", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
           Tyear: this.my_filter.year,
-          Fyear: this.my_filter.year-1
+          Fyear: this.my_filter.year-2
         })
         .then(response => {
           console.log(response.data)
