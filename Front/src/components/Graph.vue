@@ -605,11 +605,14 @@ export default {
           Fyear:"2016"
         })
         .then(response => {
-         
-          console.log(response.data.length) 
-          console.log(response.data)
-         
-          console.log("Finish Myyear")
+           this.timelabel = response.data.time;
+              this.wind_l = response.data.wind;
+              this.tmp_l = response.data.tmp;
+              this.uv_l = response.data.uv;
+              this.humid_l = response.data.humid;
+              this.add_all();
+              this.show = true;
+              this.showAlert = false;
         })
         .catch(function(error) {
           console.log(error);
