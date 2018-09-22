@@ -596,6 +596,7 @@ export default {
     },
     getMYear(){
        this.C = false;
+       console.log("test MYear")
       axios
         .post(url + "/api/getMYear", {
           location: this.my_filter.location,
@@ -604,8 +605,9 @@ export default {
           Fyear: this.my_filter.year-2
         })
         .then(response => {
-          console.log("test MYear")
-          console.log(response.data)
+         
+          console.log(response.data.length) 
+          console.log("Finish Myyear")
         })
         .catch(function(error) {
           console.log(error);
