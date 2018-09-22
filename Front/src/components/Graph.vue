@@ -57,7 +57,7 @@
               </b-input-group>
             </b-col>
             <b-col><b-form-radio-group class="mt-4" buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/></b-col>
-            <b-col><b-button class="mt-4" variant="info" v-on:click="Search('Year')">ค้นหา</b-button></b-col>
+            <b-col><b-button class="mt-4" variant="info" v-on:click="Search('MYear')">ค้นหา</b-button></b-col>
         </b-row>
       </b-tab>
 
@@ -273,6 +273,7 @@ export default {
         else if (m === "Month") this.getMonth();
         else if (m === "Year") this.getYear();
         else if (m === "Custom") this.getCustom();
+        else if (m === "MYear") this.getMYear();
       }
     },
     OnSL() {
@@ -591,6 +592,23 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
+    },
+    getMYear(){
+       this.C = false;
+      axios
+        .post(url + "/api/getYear", {
+          location: this.my_filter.location,
+          inBuilding: this.my_filter.inBuilding,
+          Tyear: this.my_filter.year,
+          Fyear: this.my_filter.year-1
+        })
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+
     },
     getCustom() {
       this.C = false;
