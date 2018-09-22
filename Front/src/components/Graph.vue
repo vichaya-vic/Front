@@ -602,12 +602,12 @@ export default {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
           Tyear: this.my_filter.year,
-          Fyear: this.my_filter.year-2
+          Fyear: this.my_filter.year-1
         })
         .then(response => {
          
           console.log(response.data.length) 
-          console.log(new Date(response.data))
+          console.log(response.data)
          
           console.log("Finish Myyear")
         })
