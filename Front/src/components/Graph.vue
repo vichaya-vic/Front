@@ -603,6 +603,7 @@ export default {
           Fyear: this.my_filter.year-2
         })
         .then(response => {
+          console.log("test MYear")
           console.log(response.data)
         })
         .catch(function(error) {
