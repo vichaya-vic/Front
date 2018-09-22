@@ -557,6 +557,7 @@ export default {
     },
     getYear() {
       this.C = false;
+      console.log("getYear")
       axios
         .post(url + "/api/getYear", {
           location: this.my_filter.location,
