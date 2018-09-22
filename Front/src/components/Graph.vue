@@ -607,6 +607,8 @@ export default {
         .then(response => {
          
           console.log(response.data.length) 
+          console.log(response.data[0])
+            console.log(response.data[response.data.length])
           console.log("Finish Myyear")
         })
         .catch(function(error) {
