@@ -1,5 +1,5 @@
 <template>
-  <div class="app flex-row align-items-center mt-5">
+  <div class="app flex-row align-items-center my-5" style="min-height:500px">
     <div class="container">
       <b-form-group class="text-center" style="margin-left:15%;margin-right:15%">
         <b-input-group>
@@ -15,12 +15,62 @@
             <template slot="button-content">
               <b-img :src="require('../assets/flag.png')" center width="20" height="20"/>
             </template>
-            <b-dropdown-item v-on:click="getFilter(null)">ธงทั้งหมด</b-dropdown-item>
-            <b-dropdown-item v-on:click="getFilter('dark')">ธงสีดำ</b-dropdown-item>
-            <b-dropdown-item v-on:click="getFilter('danger')">ธงสีแดง</b-dropdown-item>
-            <b-dropdown-item v-on:click="getFilter('warning')">ธงสีเหลือง</b-dropdown-item>
-            <b-dropdown-item v-on:click="getFilter('success')">ธงสีเขียว</b-dropdown-item>
-            <b-dropdown-item v-on:click="getFilter('light')">ธงสีขาว</b-dropdown-item>
+            <b-dropdown-item v-on:click="getFilter(null)">
+              <b-row>
+                <b-col cols="2">
+                  <b-img :src="require('../assets/flag-all.png')" left width="20" height="20"/>
+                </b-col>
+                <b-col cols="4">ธงทั้งหมด</b-col>
+              </b-row>
+            </b-dropdown-item>
+            <b-dropdown-item v-on:click="getFilter('dark')">
+              <b-row>
+                <b-col cols="2">
+                  <b-img :src="require('../assets/flag-dark.png')" left width="20" height="20"/>
+                </b-col>
+                <b-col cols="4">ธงสีดำ</b-col>
+              </b-row>
+            </b-dropdown-item>
+            <b-dropdown-item v-on:click="getFilter('danger')">
+              <b-row>
+                <b-col cols="2">
+                  <b-img :src="require('../assets/flag-danger.png')" left width="20" height="20"/>
+                </b-col>
+                <b-col cols="4">ธงสีแดง</b-col>
+              </b-row>
+            </b-dropdown-item>
+            <b-dropdown-item v-on:click="getFilter('warning')">
+              <b-row>
+                <b-col cols="2">
+                  <b-img :src="require('../assets/flag-warning.png')" left width="20" height="20"/>
+                </b-col>
+                <b-col cols="4">ธงสีเหลือง</b-col>
+              </b-row>
+            </b-dropdown-item>
+            <b-dropdown-item v-on:click="getFilter('success')">
+              <b-row>
+                <b-col cols="2">
+                  <b-img :src="require('../assets/flag-success.png')" left width="20" height="20"/>
+                </b-col>
+                <b-col cols="4">ธงสีเขียว</b-col>
+              </b-row>
+            </b-dropdown-item>
+            <b-dropdown-item v-on:click="getFilter('light')">
+              <b-row>
+                <b-col cols="2">
+                  <b-img :src="require('../assets/flag-light.png')" left width="20" height="20"/>
+                </b-col>
+                <b-col cols="4">ธงสีขาว</b-col>
+              </b-row>
+            </b-dropdown-item>
+            <b-dropdown-item v-if="Permission" v-on:click="getFilter('secondary')">
+              <b-row>
+                <b-col cols="2">
+                  <b-img :src="require('../assets/flag-secondary.png')" left width="20" height="20"/>
+                </b-col>
+                <b-col cols="4">ตรวจสอบ</b-col>
+              </b-row>
+            </b-dropdown-item>
           </b-dropdown>
 
           <b-button v-if="Permission" v-on:click="showModal('modal1')" variant="info" class="ml-4" v-b-tooltip.hover title="เพิ่มสถานที่"><b-img :src="require('../assets/add.png')" center width="20" height="20"/></b-button>
@@ -30,12 +80,12 @@
       </b-form-group>
 
       <b-alert class="mt-5" variant="danger" dismissible :show="datas.length===0" @dismissed="datas.length!=0">ไม่พบข้อมูล</b-alert>
-
+  
       <b-row class="justify-content-center text-center" v-if="mode">
-        <b-col cols="12" sm="6" lg="3" v-for="i in datas.length" v-bind:key="i">
-          <b-button :variant="datas[i-1].outdoor.flag" style="width:100%" class="p-0 mt-5" v-on:click="toGraph(datas[i-1].location)" v-b-tooltip.hover :title="datas[i-1].location">
+        <b-col cols="12" sm="6" md="6" lg="4" v-for="i in datas.length" v-bind:key="i">
+          <b-button :variant="datas[i-1].outdoor.flag" style="width:100%;" class="p-0 mt-5" v-on:click="toGraph(datas[i-1].location)" v-b-tooltip.hover :title="datas[i-1].location">
             <b-card-body class="clearfix">
-              <h4 class="font-weight-bold">{{datas[i-1].location}}</h4>
+              <h4 class="font-weight-bold" v-for="j in datas[i-1].name" v-bind:key="j">{{j}}</h4>
               <hr class="my-4">
 
               <b-row align-h="center" align-v="center">
@@ -70,7 +120,7 @@
             </b-card-body>
 
             <b-card-footer class="text-right py-0">
-              <small class="font-italic font-weight-light" style="height: 20%">
+              <small class="font-italic font-weight-light">
                 (ในอาคาร) {{showTime(datas[i-1].indoor.time)}}<br>
                 (นอกอาคาร) {{showTime(datas[i-1].outdoor.time)}}
               </small>
@@ -80,13 +130,14 @@
       </b-row>
 
       <b-row class="justify-content-center text-center" v-if="!mode">
-        <b-col cols="12" sm="6" lg="3" v-for="i in datas.length" v-bind:key="i">
+        <b-col cols="12" sm="6" md="6" lg="4" v-for="i in datas.length" v-bind:key="i">
           <b-card style="width:100%" class="p-0 mt-5" no-body bg-variant="light">
             <div class="text-right">
-              <b-button v-if="Permission" variant="light" class="" v-on:click="showDel(datas[i-1].location)"><b-img :src="require('../assets/cross.png')" center width="20" height="20"/></b-button>
+              <b-button v-if="Permission" variant="light" v-on:click="showDel(datas[i-1].location)"><b-img :src="require('../assets/cross.png')" center width="20" height="20"/></b-button>
             </div>
+            
             <b-card-body class="clearfix pt-0">
-              <h4 class="font-weight-bold">{{datas[i-1].location}}</h4>
+              <h4 class="font-weight-bold" v-for="j in datas[i-1].name" v-bind:key="j">{{j}}</h4>
               <hr class="my-4">
 
               <b-row align-h="center" align-v="center">
@@ -121,7 +172,7 @@
             </b-card-body>
 
             <b-card-footer class="text-right py-0">
-              <small class="font-italic font-weight-light" style="height: 20%">
+              <small class="font-italic font-weight-light">
                 (ในอาคาร) {{showTime(datas[i-1].indoor.time)}}<br>
                 (นอกอาคาร) {{showTime(datas[i-1].outdoor.time)}}
               </small>
@@ -201,11 +252,22 @@ export default {
                 response.data.datas[i].outdoor.flag === this.filter ||
                 this.filter === null
               ) {
-                datas.push(response.data.datas[i]);
+                if (response.data.datas[i].outdoor.flag === "secondary") {
+                  if (this.Permission) {
+                    var temp = response.data.datas[i];
+                    temp.name = temp.location.split(" ");
+                    datas.push(temp);
+                  }
+                } else {
+                  var temp = response.data.datas[i];
+                  temp.name = temp.location.split(" ");
+                  datas.push(temp);
+                }
               }
             }
             this.locations = locations;
             this.datas = datas;
+            console.log(this.datas);
           } else {
             this.addName("");
             this.addEmail("");
@@ -269,7 +331,7 @@ export default {
       axios
         .post(url + "/api/delLocation", { location: this.location })
         .then(response => {
-          console.log(response.data)
+          console.log(response.data);
           if (response.data.confirm) {
             this.hideModal("modal4");
             this.showModal("modal5");

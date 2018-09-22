@@ -1,5 +1,5 @@
 <template>
-  <div class="app flex-row align-items-center mt-5">
+  <div class="app flex-row align-items-center mt-5" style="min-height:500px">
     <div class="container">
       <b-card no-body>
         <b-card-header><b-img :src="require('../assets/users.png')" left width="25" height="25"/><h5>ผู้ใช้ทั้งหมด</h5></b-card-header>
