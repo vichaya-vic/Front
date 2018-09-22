@@ -53,7 +53,7 @@
             <b-col>
               <b-input-group class="mt-4">
                 <div class="input-group-prepend"><div class="input-group-text"><b-img :src="require('../assets/calendar.png')" left width="20" height="20"/></div></div>
-                <b-form-input type="text" v-model="my_filter.year" placeholder="กรุณาระบุปี ค.ศ."></b-form-input> 
+                <b-form-input type="text" v-model="my_filter.Fyear" placeholder="กรุณาระบุปี ค.ศ."></b-form-input><label >ถึง</label><b-form-input type="text" v-model="my_filter.Tyear" placeholder="กรุณาระบุปี ค.ศ.">
               </b-input-group>
             </b-col>
             <b-col><b-form-radio-group class="mt-4" buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/></b-col>
@@ -170,7 +170,8 @@ export default {
         inBuilding: true,
         typedate: new Date().toLocaleDateString(),
         month: new Date().getMonth() + 1,
-        year: new Date().getFullYear(),
+        Fyear: new Date().getFullYear()-1,
+        Tyear: new Date().getFullYear(),
         Ftime: "12:00",
         Ttime: "12:00",
         Range_Date: null
@@ -601,8 +602,8 @@ export default {
         .post(url + "/api/getMYear", {
           location: this.my_filter.location,
           inBuilding: this.my_filter.inBuilding,
-          Tyear:"2018",
-          Fyear:"2016"
+          Tyear:this.my_filter.Tyear,
+          Fyear:this.my_filter.Fyear
         })
         .then(response => {
            this.timelabel = response.data.time;
