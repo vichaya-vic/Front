@@ -65,9 +65,13 @@
                   <b-form-text class="mb-3">
                     รหัสผ่านต้องมีขนาด 6-12 ตัวอักษร และต้องมีตัวเลข, ตัวพิมพ์ใหญ่และตัวพิมพ์เล็กอย่างน้อยอย่างละ 1ตัว
                   </b-form-text>
+                  
+                  <b-form-radio-group buttons button-variant="outline-secondary" v-model="form.isAdmin" class="mb-4" style="width:100%">
+                    <b-form-radio :value="false" style="width:50%">ผู้ใช้</b-form-radio>
+                    <b-form-radio :value="true" style="width:50%">ผู้ดูแล</b-form-radio>
+                  </b-form-radio-group>
 
-                  <b-form-radio-group plain :options="[{text:'ยูสเซอร์',value:false},{text:'แอดมิน',value:true}]" v-model="form.isAdmin" class="mb-4"/>                   
-                  <b-button type="submit" variant="success" style="width:100%">เพิ่มบัญชีผู้ใช้</b-button>
+                  <b-button type="submit" variant="success" style="width:100%">เพิ่มบัญชี</b-button>
                 </b-form>
               </b-card-body>
             </b-card>

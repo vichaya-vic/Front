@@ -82,12 +82,13 @@
       <b-alert class="mt-5" variant="danger" dismissible :show="datas.length===0" @dismissed="datas.length!=0">ไม่พบข้อมูล</b-alert>
   
       <b-row class="justify-content-center text-center" v-if="mode">
-        <b-col cols="12" sm="6" md="6" lg="4" v-for="i in datas.length" v-bind:key="i">
-          <b-button :variant="datas[i-1].outdoor.flag" style="width:100%;" class="p-0 mt-5" v-on:click="toGraph(datas[i-1].location)" v-b-tooltip.hover :title="datas[i-1].location">
-            <b-card-body class="clearfix">
-              <h4 class="font-weight-bold" v-for="j in datas[i-1].name" v-bind:key="j">{{j}}</h4>
-              <hr class="my-4">
-
+        <b-col cols="12" sm="12" md="6" lg="4" v-for="i in datas.length" v-bind:key="i">
+          <b-button :variant="datas[i-1].outdoor.flag" style="width:100%;height:90%" class="p-0 mt-5" v-on:click="toGraph(datas[i-1].location)" v-b-tooltip.hover :title="datas[i-1].location">
+            <b-card no-body bg-variant="transparent" style="width:100%;height:100%">
+            <b-card-header>
+              <h4 class="font-weight-bold" style="height:30%" v-for="j in datas[i-1].name" v-bind:key="j">{{j}}</h4>
+            </b-card-header>
+            <b-card-body>
               <b-row align-h="center" align-v="center">
                 <b-col class="text-center font-weight-bold">ในอาคาร</b-col>
                 <b-col class="text-center"></b-col>
@@ -125,6 +126,7 @@
                 (นอกอาคาร) {{showTime(datas[i-1].outdoor.time)}}
               </small>
             </b-card-footer>
+            </b-card>
           </b-button>
         </b-col>
       </b-row>

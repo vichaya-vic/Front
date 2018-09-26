@@ -88,8 +88,8 @@ export default {
             this.users = response.data.datas.map(function(obj) {
               var new_obj = {};
 
-              if (obj.isAdmin === true) new_obj.type = "แอดมิน";
-              else if (obj.isAdmin === false) new_obj.type = "ยูสเซอร์";
+              if (obj.isAdmin === true) new_obj.type = "ผู้ดูแล";
+              else if (obj.isAdmin === false) new_obj.type = "ผู้ใช้";
 
               new_obj.name = obj.name;
               new_obj.email = obj.email;
