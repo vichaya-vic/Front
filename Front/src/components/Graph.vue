@@ -53,7 +53,9 @@
             <b-col>
               <b-input-group class="mt-4">
                 <div class="input-group-prepend"><div class="input-group-text"><b-img :src="require('../assets/calendar.png')" left width="20" height="20"/></div></div>
-                <b-form-input type="text" v-model="my_filter.Fyear" placeholder="กรุณาระบุปี ค.ศ."></b-form-input><label >ถึง</label><b-form-input type="text" v-model="my_filter.Tyear" placeholder="กรุณาระบุปี ค.ศ.">
+                <b-form-input type="text" v-model="my_filter.Fyear" placeholder="กรุณาระบุปี ค.ศ."></b-form-input>
+                <div class="input-group-prepend"><div class="input-group-text"><b-img :src="require('../assets/to.png')" left width="20" height="20"/></div></div>
+                <b-form-input type="text" v-model="my_filter.Tyear" placeholder="กรุณาระบุปี ค.ศ.">
               </b-input-group>
             </b-col>
             <b-col><b-form-radio-group class="mt-4" buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/></b-col>
