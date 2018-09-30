@@ -1,5 +1,5 @@
 <template>
-  <div class="app flex-row align-items-center my-5" style="min-height:500px">
+  <div class="app flex-row align-items-center my-5">
     <div class="container">
       <b-form-group class="text-center" style="margin-left:15%;margin-right:15%">
         <b-input-group>
