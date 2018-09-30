@@ -1,5 +1,5 @@
 <template>
-  <div class="app flex-row align-items-center mt-5" style="min-height:500px">
+  <div class="app flex-row align-items-center mt-5">
     <div class="container">
       <b-row>
         <b-col cols="1" class="pl-5"><b-img v-if="my_filter.location!=null" :src="require('../assets/flag-'+datas[datas.findIndex(x => x.location == my_filter.location)].outdoor.flag+'.png')" left width="40" height="40"/></b-col>
