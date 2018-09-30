@@ -5,7 +5,7 @@
     </div>        
     <router-view/>
     <div>
-      <Footer/>
+      <Footer class="footer"/>
     </div>
   </div>
 </template>
@@ -23,3 +23,13 @@ export default {
   name: 'app'
 }
 </script>
+
+<style>
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  text-align: right;
+}
+</style>
