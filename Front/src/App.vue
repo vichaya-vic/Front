@@ -1,35 +1,32 @@
 <template>
-  <div>     
-    <div>
-      <Navbar/>     
-    </div>        
-    <router-view/>
-    <div>
-      <Footer class="footer"/>
-    </div>
+  <div id="div1">
+    <Navbar/>      
+    <router-view id="content1"/>
+    <Footer/>    
   </div>
 </template>
  
 <script>
-import Navbar from './layouts/Navbar.vue'
-import Footer from './layouts/Footer.vue'
-import store from './vuex/store.js'
-import Vuex from 'vuex'
-global.vuex = Vuex
+import Navbar from "./layouts/Navbar.vue";
+import Footer from "./layouts/Footer.vue";
+import store from "./vuex/store.js";
+import Vuex from "vuex";
+global.vuex = Vuex;
 
 export default {
-  components: {Navbar,Footer},
+  components: { Navbar, Footer },
   store,
-  name: 'app'
-}
+  name: "app"
+};
 </script>
 
 <style>
-.footer {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  text-align: right;
+#div1{
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+#content1{
+  flex: 1;
 }
 </style>

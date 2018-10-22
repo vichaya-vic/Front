@@ -68,7 +68,7 @@
                 <b-col cols="2">
                   <b-img :src="require('../assets/flag-secondary.png')" left width="20" height="20"/>
                 </b-col>
-                <b-col cols="4">ตรวจสอบ</b-col>
+                <b-col cols="4">ไม่มีข้อมูล</b-col>
               </b-row>
             </b-dropdown-item>
           </b-dropdown>

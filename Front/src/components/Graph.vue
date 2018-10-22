@@ -55,16 +55,16 @@
                 <div class="input-group-prepend"><div class="input-group-text"><b-img :src="require('../assets/calendar.png')" left width="20" height="20"/></div></div>
                 <b-form-input type="text" v-model="my_filter.Fyear" placeholder="กรุณาระบุปี ค.ศ."></b-form-input>
                 <div class="input-group-prepend"><div class="input-group-text"><b-img :src="require('../assets/to.png')" left width="20" height="20"/></div></div>
-                <b-form-input type="text" v-model="my_filter.Tyear" placeholder="กรุณาระบุปี ค.ศ.">
+                <b-form-input type="text" v-model="my_filter.Tyear" placeholder="กรุณาระบุปี ค.ศ."></b-form-input>
               </b-input-group>
             </b-col>
             <b-col><b-form-radio-group class="mt-4" buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/></b-col>
             <b-col><b-button class="mt-4" variant="info" v-on:click="Search('MYear')">ค้นหา</b-button></b-col>
-        </b-row>
-      </b-tab>
+          </b-row>
+        </b-tab>
 
-      <b-tab title="แสดงข้อมูลแบบกำหนดเอง" v-on:click="clearData" >
-        <b-row class="justify-content-center text-center" align-h="center" align-v="center">
+        <b-tab title="แสดงข้อมูลแบบกำหนดเอง" v-on:click="clearData" >
+          <b-row class="justify-content-center text-center" align-h="center" align-v="center">
             <b-col>
               <b-input-group class="mt-4">
                 <div class="input-group-prepend"><div class="input-group-text"><b-img :src="require('../assets/calendar.png')" left width="20" height="20"/></div></div>
@@ -82,21 +82,21 @@
             <b-col cols="2"><b-form-radio-group class="mt-4" buttons v-model="my_filter.inBuilding" :options="[{text:'ในอาคาร',value:true},{text:'นอกอาคาร',value:false}]" button-variant="outline-secondary"/></b-col>
             <b-col cols="1"><b-button class="mt-4 ml-3" variant="info" v-on:click="Search('Custom')">ค้นหา</b-button></b-col>
             <b-col cols="1"><b-button class="mt-4 p-2" variant="success" v-on:click="getCSV"><b-img :src="require('../assets/download.png')" left width="20" height="20"/></b-button></b-col>
-        </b-row>
-      </b-tab>    
-    </b-tabs>
+          </b-row>
+        </b-tab>    
+      </b-tabs>
 
-    <b-container v-if="show&&!showAlert">
-      <b-row>
-          <b-col>
+      <b-container v-if="show&&!showAlert">
+        <b-row>
+            <b-col>
             <b-form-group>
-              <b-form-radio-group buttons v-model="type_chart" :options="[{text:'กราฟเส้น',value:'line'},{text:'กราฟแท่ง',value:'bar'}]" button-variant="outline-secondary" class="pt-3" v-on:input="add_all"/>
-            </b-form-group>
-          </b-col>
-      </b-row>
+                <b-form-radio-group buttons v-model="type_chart" :options="[{text:'กราฟเส้น',value:'line'},{text:'กราฟแท่ง',value:'bar'}]" button-variant="outline-secondary" class="pt-3" v-on:input="add_all"/>
+              </b-form-group>
+            </b-col>
+        </b-row>
 
-      <b-card-group>
-        <b-row class="justify-content-center text-center">
+        <b-card-group>
+          <b-row class="justify-content-center text-center">
           <b-col lg="6" class="mb-4">
             <b-card no-body>
               <b-card-header><h5 class="font-weight-bold">รังสี UV</h5></b-card-header>
@@ -115,31 +115,31 @@
             </b-card>
             </b-col>
 
-          <b-col lg="6" class="mb-4">
-            <b-card no-body>
-              <b-card-header><h5 class="font-weight-bold">แรงลม</h5></b-card-header>
-              <b-card-body>
-                <LC :chartData="this.dataa_wind" :options="this.option" />
-              </b-card-body>
-            </b-card>
-          </b-col>
+            <b-col lg="6" class="mb-4">
+              <b-card no-body>
+                <b-card-header><h5 class="font-weight-bold">แรงลม</h5></b-card-header>
+                <b-card-body>
+                  <LC :chartData="this.dataa_wind" :options="this.option" />
+                </b-card-body>
+              </b-card>
+            </b-col>
 
-          <b-col lg="6" class="mb-4">
-            <b-card no-body>
-              <b-card-header><h5 class="font-weight-bold">ความชื้น</h5></b-card-header>
-              <b-card-body>
-                <LC :chartData="this.dataa_humid" :options="this.option" />
-              </b-card-body>
-            </b-card>
-          </b-col>
-        </b-row>
-      </b-card-group>
-    </b-container>
+            <b-col lg="6" class="mb-4">
+              <b-card no-body>
+                <b-card-header><h5 class="font-weight-bold">ความชื้น</h5></b-card-header>
+                <b-card-body>
+                  <LC :chartData="this.dataa_humid" :options="this.option" />
+                </b-card-body>
+              </b-card>
+            </b-col>
+          </b-row>
+        </b-card-group>
+      </b-container>
 
-    <b-alert variant="danger" class="mt-4" dismissible :show="showAlert" @dismissed="showAlert=false">
-      ไม่พบข้อมูลนี้ในระบบ
-    </b-alert>
-  </div> 
+      <b-alert variant="danger" class="mt-4" dismissible :show="showAlert" @dismissed="showAlert=false">
+        ไม่พบข้อมูลนี้ในระบบ
+      </b-alert>
+    </div> 
   </div> 
 </template>
 
