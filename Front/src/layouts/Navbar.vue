@@ -20,6 +20,14 @@
                   <b-col cols="4">หน้าแรก</b-col>
                 </b-row>
               </b-dropdown-item>
+              <b-dropdown-item v-on:click="urlRedirect">
+                <b-row>
+                  <b-col cols="2">
+                    <b-img :src="require('../assets/home.png')" left width="20" height="20"/>
+                  </b-col>
+                  <b-col cols="4">เว็บ</b-col>
+                </b-row>
+              </b-dropdown-item>
               <b-dropdown-item v-on:click="toPage('graph')">
                 <b-row>
                   <b-col cols="2">
@@ -28,7 +36,6 @@
                   <b-col cols="4">กราฟ</b-col>
                 </b-row>
               </b-dropdown-item>
-
               <div v-if="Permission">
                 <b-dropdown-item v-on:click="toPage('user')">
                   <b-row>
@@ -92,6 +99,9 @@ export default {
     }
   },
   methods: {
+    urlRedirect(){
+      window.location.href = "http://www.w3schools.com";
+    },
     logout() {
       axios.defaults.withCredentials = true;
       axios
