@@ -22,10 +22,7 @@
               </b-dropdown-item>
               <b-dropdown-item v-on:click="urlRedirect">
                 <b-row>
-                  <b-col cols="2">
-                    <b-img :src="require('../assets/home.png')" left width="20" height="20"/>
-                  </b-col>
-                  <b-col cols="4">เว็บ</b-col>
+                  <b-col cols="4">Medical Checkup</b-col>
                 </b-row>
               </b-dropdown-item>
               <b-dropdown-item v-on:click="toPage('graph')">
@@ -100,7 +97,7 @@ export default {
   },
   methods: {
     urlRedirect(){
-      window.location.href = "http://www.w3schools.com";
+      window.location.href = "http://103.76.181.106";
     },
     logout() {
       axios.defaults.withCredentials = true;
