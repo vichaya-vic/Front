@@ -20,6 +20,11 @@
                   <b-col cols="4">หน้าแรก</b-col>
                 </b-row>
               </b-dropdown-item>
+              <b-dropdown-item v-on:click="urlRedirect">
+                <b-row>
+                  <b-col cols="4">Medical Checkup</b-col>
+                </b-row>
+              </b-dropdown-item>
               <b-dropdown-item v-on:click="toPage('graph')">
                 <b-row>
                   <b-col cols="2">
@@ -28,7 +33,6 @@
                   <b-col cols="4">กราฟ</b-col>
                 </b-row>
               </b-dropdown-item>
-
               <div v-if="Permission">
                 <b-dropdown-item v-on:click="toPage('user')">
                   <b-row>
@@ -92,6 +96,9 @@ export default {
     }
   },
   methods: {
+    urlRedirect(){
+      window.location.href = "http://103.76.181.106";
+    },
     logout() {
       axios.defaults.withCredentials = true;
       axios
