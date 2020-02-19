@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     urlRedirect(){
-      window.location.href = "http://103.76.181.106";
+      window.location.href = "http://103.74.255.214:8000";
     },
     logout() {
       axios.defaults.withCredentials = true;
